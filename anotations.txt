@@ -1,0 +1,17 @@
+
+config -
+theme
+language
+
+Bruno Ferreira
+
+content -
+Projects
+Reviews
+Uncategorized
+Data Scients and IA
+...
+
+cbonsai
+jesus christ
+
