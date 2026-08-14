@@ -1,8 +1,16 @@
-:root {
-  --background: white;
-  --foreground: black;
-  --border: black;
-  --title: black;
+/* :root é uma pseudo-classe CSS que seleciona o */
+/* elemento raiz do documento */
+@media (prefers-color-scheme: dark) {
+  :root {
+    /* -- é obrigatório para declarar Custom Property, as */
+    /* variáveis no css */
+    /* aqui também é implícito que esse é o tema padrao*/
+
+    --background: black;
+    --foreground: white;
+    --border: white;
+    --title: white;
+  }
 }
 
 [data-theme="dark"] {
@@ -10,6 +18,13 @@
   --foreground: white;
   --border: white;
   --title: white;
+}
+
+[data-theme="light"] {
+  --background: white;
+  --foreground: black;
+  --border: black;
+  --title: black;
 }
 
 * {
@@ -21,7 +36,6 @@
 html {
   font-size: 16px;
 }
-
 
 body {
 
@@ -59,7 +73,6 @@ body {
   background: var(--background);
   color: var(--foreground);
 }
-
 
 .like-tui {
   /* classe para fazer as bordas das seçoes inspiradas */
