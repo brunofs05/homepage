@@ -34,6 +34,7 @@
 }
 
 html {
+  font-family: monospace;
   font-size: 16px;
 }
 
@@ -107,8 +108,8 @@ h1 {
 h2 {
   font-size: 1.22rem;
   position: absolute;
-  top: -34px;
-  left: 12px;
+  top: -2rem;
+  left: 1rem;
   background: var(--background);
   padding: 0.5%;
   /* border-style: solid; */
@@ -140,4 +141,10 @@ main {
   width: 100%;
   max-width: 630px;
 
+}
+
+p {
+  text-align: justify;
+  padding-right: 2.5rem;
+  padding-left: 2.5rem;
 }
