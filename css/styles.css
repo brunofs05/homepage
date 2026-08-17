@@ -1,3 +1,6 @@
+/* --- INDEX GERAL CONFIG --- */
+
+
 /* :root é uma pseudo-classe CSS que seleciona o */
 /* elemento raiz do documento */
 @media (prefers-color-scheme: dark) {
@@ -147,4 +150,158 @@ p {
   text-align: justify;
   padding-right: 2.5rem;
   padding-left: 2.5rem;
+}
+
+/* --- PHOTOS SECTION --- */
+
+/* O Grid que organiza as fotos */
+.photo-grid {
+  /* Ativa o grid */
+  display: grid;
+  /* Cria colunas responsivas: No mínimo 150px de largura, 
+     se sobrar espaço, distribui igualmente (1fr) */
+  grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+  gap: 1rem;
+  /* Espaço entre os itens */
+  padding: 1rem;
+  margin: 0;
+}
+
+/* O botão que envolve cada foto */
+.photo-btn {
+  /* Tira todo o estilo padrão de botão, deixando ele invisível, só clicável */
+  background: none;
+  border: none;
+  padding: 0;
+  width: 100%;
+  cursor: pointer;
+  color: inherit;
+  font-family: inherit;
+  transition: opacity 0.2s ease;
+}
+
+/* Estilo para que o focus no botão fique visível pro teclado */
+.photo-btn:focus-visible {
+  outline: 2px solid var(--border);
+  outline-offset: 4px;
+}
+
+/* Container do preview (figura) */
+.photo-btn figure {
+  margin: 0;
+  display: flex;
+  flex-direction: column;
+  /* Segue a sua borda tui */
+  border: 1px solid var(--border);
+  background: var(--background);
+  transition: transform 0.2s ease;
+}
+
+/* Efeitinho legal quando passa o mouse por cima do grid */
+.photo-btn:hover figure {
+  transform: translateY(-2px);
+}
+
+/* A miniatura em si */
+.photo-btn img {
+  width: 100%;
+  /* Fixamos uma altura pra formar os "quadradinhos" */
+  height: 150px;
+  /* Cover impede que a foto amasse, cortando as sobras se precisar */
+  object-fit: cover;
+}
+
+/* O footer de cada item (data) */
+.photo-btn figcaption {
+  padding: 0.5rem;
+  border-top: 1px solid var(--border);
+  text-align: center;
+  font-size: 0.9rem;
+}
+
+/* --- MODAL (DIALOG) --- */
+
+/* Estiliza o próprio balão do modal */
+#photo-modal {
+  /* Reseta os padrões do navegador pro dialog */
+  color: var(--foreground);
+  background: var(--background);
+  /* Usa as variáveis que vc já criou na classe .like-tui */
+  border: 1px solid var(--border);
+  margin: auto;
+  max-width: 90vw;
+  max-height: 90vh;
+  padding: 1rem;
+}
+
+/* ::backdrop é a "tela preta" semi-transparente que fica atrás do modal */
+#photo-modal::backdrop {
+  background: rgba(0, 0, 0, 0.8);
+}
+
+/* O botão de fechar */
+.close-btn {
+  background: var(--background);
+  color: var(--foreground);
+  border: 1px solid var(--border);
+  padding: 0.25rem 0.5rem;
+  cursor: pointer;
+  font-family: monospace;
+  position: absolute;
+  top: 1rem;
+  right: 1rem;
+}
+
+.close-btn:hover {
+  background: var(--foreground);
+  color: var(--background);
+}
+
+/* Estrutura interna do Modal */
+.modal-content {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 1rem;
+  margin-top: 2rem;
+}
+
+/* A foto em tamanho real */
+#modal-image {
+  max-width: 100%;
+  /* A imagem não pode ultrapassar 60% da altura da tela, sobrando espaço pro texto */
+  max-height: 60vh;
+  /* contain mostra a foto inteira sem cortar */
+  object-fit: contain;
+  border: 1px solid var(--border);
+}
+
+/* Footer maximizado (Metadados) */
+.modal-footer {
+  width: 100%;
+  border-top: 1px solid var(--border);
+  padding-top: 1rem;
+}
+
+.modal-footer h3 {
+  margin-top: 0;
+  font-size: 1.1rem;
+}
+
+/* Definition List para os Metadados (dt=Key, dd=Value) */
+.modal-footer dl {
+  display: grid;
+  /* Grade com 2 colunas: a Chave (auto) e o Valor (1fr) */
+  grid-template-columns: auto 1fr;
+  gap: 0.5rem 1rem;
+  margin: 0;
+  font-size: 0.9rem;
+}
+
+.modal-footer dt {
+  font-weight: bold;
+}
+
+.modal-footer dd {
+  margin: 0;
 }

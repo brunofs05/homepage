@@ -1,1 +1,5 @@
 anotations.txt
+
+images/**
+
+!images/generate_thumbnails.py
