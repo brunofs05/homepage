@@ -112,9 +112,11 @@ h2 {
   font-size: 1.22rem;
   position: absolute;
   top: -2rem;
-  left: 1rem;
+  left: 0.75rem;
   background: var(--background);
   padding: 0.5%;
+  padding-left: 0.4rem;
+  padding-right: 0.4rem;
   /* border-style: solid; */
   /* border-color: var(--border); */
 
