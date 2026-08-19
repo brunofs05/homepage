@@ -12,7 +12,7 @@
   <!-- defer é algo relacionado ao processo de: -->
   <!-- começar a carregar o html, baixar o js, continua -->
   <!-- interpretando o html, executa o js -->
-  <script src="js/theme.js" defer></script>
+  <script src="js/theme.js"></script>
   <script src="js/photos.js" defer></script>
 
 </head>
@@ -32,12 +32,8 @@
         <li>
           <!-- O botão torna a imagem clicável para teclado/mouse (Acessibilidade) -->
           <!-- Os atributos data-* guardam os metadados dessa foto específica -->
-          <button class="photo-btn" 
-                  data-full-src="images/20180101_182349.jpg" 
-                  data-date="01 Jan, 2018"
-                  data-sensor="Sony IMX Genérico"
-                  data-size="3.2 MB"
-                  data-aperture="f/1.8">
+          <button class="photo-btn" data-full-src="images/20180101_182349.jpg" data-date="01 Jan, 2018"
+            data-sensor="Sony IMX Genérico" data-size="3.2 MB" data-aperture="f/1.8">
             <figure>
               <!-- Carregamos a versão "mini" no grid para não travar a página -->
               <!-- loading="lazy" só baixa a foto quando ela for aparecer na tela -->
@@ -49,12 +45,8 @@
         </li>
         <!-- Foto 2 -->
         <li>
-          <button class="photo-btn" 
-                  data-full-src="images/20180718_081108.jpg" 
-                  data-date="18 Jul, 2018"
-                  data-sensor="Câmera Padrão"
-                  data-size="1.4 MB"
-                  data-aperture="f/2.2">
+          <button class="photo-btn" data-full-src="images/20180718_081108.jpg" data-date="18 Jul, 2018"
+            data-sensor="Câmera Padrão" data-size="1.4 MB" data-aperture="f/2.2">
             <figure>
               <img src="images/mini/20180718_081108.jpg" alt="Foto de 2018" loading="lazy">
               <figcaption>18 Jul, 2018</figcaption>
@@ -63,12 +55,8 @@
         </li>
         <!-- Foto 3 -->
         <li>
-          <button class="photo-btn" 
-                  data-full-src="images/IMG_20200119_195827.jpg" 
-                  data-date="19 Jan, 2020"
-                  data-sensor="Samsung ISOCELL"
-                  data-size="2.8 MB"
-                  data-aperture="f/1.9">
+          <button class="photo-btn" data-full-src="images/IMG_20200119_195827.jpg" data-date="19 Jan, 2020"
+            data-sensor="Samsung ISOCELL" data-size="2.8 MB" data-aperture="f/1.9">
             <figure>
               <img src="images/mini/IMG_20200119_195827.jpg" alt="Foto de 2020" loading="lazy">
               <figcaption>19 Jan, 2020</figcaption>
@@ -77,12 +65,8 @@
         </li>
         <!-- Foto 4 -->
         <li>
-          <button class="photo-btn" 
-                  data-full-src="images/IMG_20211025_004622.jpg" 
-                  data-date="25 Out, 2021"
-                  data-sensor="Sony IMX Genérico"
-                  data-size="4.1 MB"
-                  data-aperture="f/1.8">
+          <button class="photo-btn" data-full-src="images/IMG_20211025_004622.jpg" data-date="25 Out, 2021"
+            data-sensor="Sony IMX Genérico" data-size="4.1 MB" data-aperture="f/1.8">
             <figure>
               <img src="images/mini/IMG_20211025_004622.jpg" alt="Foto Noturna 2021" loading="lazy">
               <figcaption>25 Out, 2021</figcaption>
@@ -91,12 +75,8 @@
         </li>
         <!-- Foto 5 -->
         <li>
-          <button class="photo-btn" 
-                  data-full-src="images/IMG_20230606_203119.jpg" 
-                  data-date="06 Jun, 2023"
-                  data-sensor="Sensor Principal 48MP"
-                  data-size="5.5 MB"
-                  data-aperture="f/1.7">
+          <button class="photo-btn" data-full-src="images/IMG_20230606_203119.jpg" data-date="06 Jun, 2023"
+            data-sensor="Sensor Principal 48MP" data-size="5.5 MB" data-aperture="f/1.7">
             <figure>
               <img src="images/mini/IMG_20230606_203119.jpg" alt="Foto de 2023" loading="lazy">
               <figcaption>06 Jun, 2023</figcaption>
@@ -110,19 +90,23 @@
     <dialog id="photo-modal" class="like-tui">
       <!-- Botão para fechar, útil para quem não quiser usar o 'Esc' -->
       <button id="close-modal" class="close-btn">[ X ] fechar</button>
-      
+
       <div class="modal-content">
         <!-- Aqui a imagem em tamanho real será injetada pelo JS -->
         <img id="modal-image" src="" alt="Foto Expandida">
-        
+
         <!-- O footer maximizado com os metadados. Uma Definition List (dl) é bem semântica para chave-valor -->
         <div class="modal-footer">
           <h3>Metadata</h3>
           <dl id="modal-metadata">
-            <dt>Data:</dt> <dd id="meta-date"></dd>
-            <dt>Sensor:</dt> <dd id="meta-sensor"></dd>
-            <dt>Abertura:</dt> <dd id="meta-aperture"></dd>
-            <dt>Tamanho:</dt> <dd id="meta-size"></dd>
+            <dt>Data:</dt>
+            <dd id="meta-date"></dd>
+            <dt>Sensor:</dt>
+            <dd id="meta-sensor"></dd>
+            <dt>Abertura:</dt>
+            <dd id="meta-aperture"></dd>
+            <dt>Tamanho:</dt>
+            <dd id="meta-size"></dd>
           </dl>
         </div>
       </div>

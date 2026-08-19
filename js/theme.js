@@ -18,13 +18,7 @@ const metaTag = document.querySelector('[name="color-scheme"]');
 // documentElement é uma propriedade de acesso (getter) desse objeto
 // retorna o elemento raiz do documento html, que é a tag html
 const html = document.documentElement;
-
-
 const savedScheme = localStorage.getItem("colorScheme");
-
-if (savedScheme) {
-  metaTag.setAttribute("content", savedScheme)
-}
 
 function setTheme(theme) {
   if (theme == "system") {
@@ -45,21 +39,27 @@ function setTheme(theme) {
   localStorage.setItem("colorScheme", theme);
 }
 
-if (savedScheme ){
+if (savedScheme) {
  setTheme(savedScheme); 
 }
 
-lightButton.addEventListener("click", ()=> {
-  setTheme("light"); 
-})
+if (lightButton){
+  lightButton.addEventListener("click", ()=> {
+    setTheme("light"); 
+  })
+}
 
-darkButton.addEventListener("click", () => {
-  setTheme("dark");
-})
+if (darkButton){ 
+  darkButton.addEventListener("click", () => {
+    setTheme("dark");
+  })
+}
 
-systemButton.addEventListener("click", () => {
-  setTheme("system")
-})
+if (systemButton) { 
+  systemButton.addEventListener("click", () => {
+    setTheme("system")
+  })
+}
 
 // -- GABARITO -- 
 // HTML
