@@ -18,10 +18,4 @@ jobs:
           echo "${{ secrets.SSH_KNOWN_HOSTS }}" > ~/.ssh/known_hosts
 
       - name: Deploy via rsync
-        run: |
-          rsync -avz --delete \
-            --exclude='.git' \
-            --exclude='.github' \
-            --exclude='anotations.txt' \
-            -e "ssh -i ~/.ssh/deploy_key -o UserKnownHostsFile=~/.ssh/known_hosts" \
-            ./ ${{ secrets.VPS_USER }}@${{ secrets.VPS_HOST }}:/var/www/homepage/
+        run: rsync -avz --delete --exclude='.git' --exclude='.github' --exclude='anotations.txt' -e "ssh -i ~/.ssh/deploy_key -o UserKnownHostsFile=~/.ssh/known_hosts" ./ ${{ secrets.VPS_USER }}@${{ secrets.VPS_HOST }}:/var/www/homepage/
