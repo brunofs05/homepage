@@ -2,6 +2,7 @@
 document.addEventListener('DOMContentLoaded', () => {
     
     // 1. Captura os elementos principais que vamos manipular
+    let scrollPosition = 0;
     const modal = document.getElementById('photo-modal');
     const btnClose = document.getElementById('close-modal');
     const modalImage = document.getElementById('modal-image');
@@ -50,6 +51,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
                 // Ao abrir o modal agora, a imagem já está no cache do navegador.
                 // Isso elimina o tranco/travada de redimensionamento abrindo o modal polido.
+                scrollPosition = window.scrollY;
                 modal.showModal();
             };
 
@@ -67,6 +69,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
     btnClose.addEventListener('click', () => {
         modal.close();
+        window.scrollTo(0, scrollPosition);
     });
 
     // fechar o modal clicando fora dele
@@ -74,6 +77,7 @@ document.addEventListener('DOMContentLoaded', () => {
         // Se o elemento clicado for estritamente o próprio dialog (que funciona como a área do backdrop)
         if (event.target === modal) {
             modal.close();
+            window.scrollTo(0, scrollPosition);
         }
     });
 
