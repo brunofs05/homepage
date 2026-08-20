@@ -13,6 +13,7 @@
     --foreground: white;
     --border: white;
     --title: white;
+    --todo: darkgrey;
   }
 }
 
@@ -21,6 +22,7 @@
   --foreground: white;
   --border: white;
   --title: white;
+  --todo: darkgrey;
 }
 
 [data-theme="light"] {
@@ -28,6 +30,7 @@
   --foreground: black;
   --border: black;
   --title: black;
+  --todo: dimgrey;
 }
 
 * {
@@ -37,8 +40,9 @@
 }
 
 html {
-  font-family: monospace;
+  font-family: "Courier New", monospace;
   font-size: 16px;
+  /* font-weight:; */
 }
 
 body {
@@ -99,6 +103,7 @@ h1 {
   /* o rem é relacionado ao tamanho do font-size do html, */
   /* aqui 1.75 x html font-size */
   font-size: 1.75rem;
+  /* font-weight: normal; */
   color: var(--title);
   /* test colors */
 
@@ -110,6 +115,7 @@ h1 {
 
 h2 {
   font-size: 1.22rem;
+  /* font-weight: normal; */
   position: absolute;
   top: -2rem;
   left: 0.75rem;
@@ -153,6 +159,47 @@ p {
   padding-right: 2.5rem;
   padding-left: 2.5rem;
 }
+
+/* Aplica cinza no li e desabilita o clique no link */
+li.todo {
+  color: var(--todo);
+  /* background: grey; */
+}
+
+li.todo a {
+  pointer-events: none;
+  cursor: default;
+}
+
+/* Badge "[em breve] := comming soon" aparece depois do texto do link */
+li.todo::after {
+  content: " [comming soon]";
+  font-size: 0.75rem;
+  opacity: 0.7;
+}
+
+/* --- PÁGINA EM CONSTRUÇÃO --- */
+
+/* Container centralizado dentro do .like-tui */
+.todo-page-content {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 3rem 2rem;
+  gap: 1rem;
+  text-align: center;
+  opacity: 0.6;
+}
+
+/* Texto principal de "em construção" */
+.todo-label {
+  font-size: 1.1rem;
+  letter-spacing: 0.05rem;
+  margin: 0;
+}
+
+
 
 /* --- PHOTOS SECTION --- */
 
