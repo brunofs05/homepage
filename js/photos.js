@@ -59,7 +59,7 @@ document.addEventListener('DOMContentLoaded', () => {
             preloadImg.onerror = () => {
                 btn.style.opacity = '1';
                 document.body.style.cursor = 'default';
-                console.error("Erro ao carregar a imagem original.");
+                console.error("Error loading the original image.");
             };
 
             // Mandamos o navegador começar a baixar a imagem real
