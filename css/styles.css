@@ -96,7 +96,10 @@ body {
   border-style: solid;
   border-color: var(--border);
   /* border-radius: 2%; */
-  margin: 2rem;
+
+  /* top right botton left */
+  margin: 2rem 1rem 1rem 1rem;
+  ;
 
   /* se algum filho usar position absolute, ele será posicionado */
   /* relativamente a mim */
@@ -155,7 +158,7 @@ main {
   /* não ultrapasse o máximo conforável */
   width: 100%;
   max-width: 630px;
-
+  padding: 0px 0px 0px 0px;
 }
 
 p {
