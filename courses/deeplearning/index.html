@@ -1,0 +1,143 @@
+<!DOCTYPE html>
+
+<html lang="pt_br" data-theme="">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="color-scheme" content="light dark">
+  <title>BF: DSAI: DL</title>
+  <link rel="stylesheet" href="../../css/styles.css">
+
+  <!-- defer é algo relacionado ao processo de: -->
+  <!-- começar a carregar o html, baixar o js, continua -->
+  <!-- interpretando o html, executa o js -->
+  <script src="js/theme.js" defer></script>
+
+</head>
+
+<body>
+  <main class="courses-main">
+
+    <section class="like-tui">
+      <h2>Deep Learning</h2>
+      <!-- CONTENT:START -->
+<h2>Deep Learning - anotacoes</h2><p>Referencia: Bishop, D2L e MIT conforme a lista de aulas.</p><h3>01. Introduction</h3><p>Deep learning aprende representacoes em camadas:</p><math display="block"><mi>𝑥</mi><munderover><mo stretchy="false">→</mo><mn>1</mn><mi>𝑓</mi></munderover><msub><mi>ℎ</mi><mn>1</mn></msub><munderover><mo stretchy="false">→</mo><mn>2</mn><mi>𝑓</mi></munderover><msub><mi>ℎ</mi><mn>2</mn></msub><mo stretchy="false">→</mo><mi>⋯</mi><mo stretchy="false">→</mo><mover accent="true"><mi>𝑦</mi><mo>̂</mo></mover></math><p>A ideia central e ajustar parametros <math><mi>𝜃</mi></math> para minimizar uma perda:</p><math display="block"><msup><mi>𝜃</mi><mo>∗</mo></msup><mo>=</mo><mo form="prefix" lspace="0em" rspace="0.16666666666666666em">arg</mo><munder><mo form="prefix" lspace="0em" rspace="0.16666666666666666em">min</mo><mi>𝜃</mi></munder><mfrac><mn>1</mn><mi>𝑁</mi></mfrac><munderover><mo form="prefix">∑</mo><mrow><mi>𝑖</mi><mo lspace="0em" rspace="0em">=</mo><mn>1</mn></mrow><mi>𝑁</mi></munderover><mi>ℒ︀</mi><mrow><mo>(</mo><mrow><msub><mi>𝑓</mi><mrow><mi>𝜃</mi><mrow><mo>(</mo><msub><mi>𝑥</mi><mi>𝑖</mi></msub><mo>)</mo></mrow></mrow></msub><mo>,</mo><msub><mi>𝑦</mi><mi>𝑖</mi></msub></mrow><mo>)</mo></mrow></math><p>Notas rapidas:</p><ul><li>Dados viram tensores.</li><li>O modelo produz predicoes.</li><li>A loss mede o erro.</li><li>O otimizador altera os pesos para reduzir a loss.</li><li>Generalizar significa ir bem em dados nao vistos, nao apenas memorizar treino.</li></ul><pre><code data-lang="python"><span style="color: #d73948">import</span> torch
+
+x <span style="color: #d73948">=</span> torch.<span style="color: #4b69c6">randn</span>(<span style="color: #b60157">32</span>, <span style="color: #b60157">10</span>)      <span style="color: #74747c">#</span><span style="color: #74747c"> batch com 32 exemplos e 10 atributos</span>
+y <span style="color: #d73948">=</span> torch.<span style="color: #4b69c6">randint</span>(<span style="color: #b60157">0</span>, <span style="color: #b60157">3</span>, (<span style="color: #b60157">32</span>,))
+
+<span style="color: #4b69c6">print</span>(x.shape, y.shape)</code></pre><h3>02. Basics on Neural Networks</h3><p>Um neuronio combina entrada, pesos e vies:</p><math display="block"><mi>𝑧</mi><mo>=</mo><msup><mi>𝑤</mi><mi>𝑇</mi></msup><mi>𝑥</mi><mo>+</mo><mi>𝑏</mi></math><p>Depois aplica uma ativacao nao linear:</p><math display="block"><mi>ℎ</mi><mo>=</mo><mi>𝜑</mi><mrow><mo>(</mo><mi>𝑧</mi><mo>)</mo></mrow></math><p>Sem nao linearidade, varias camadas viram apenas uma transformacao linear.</p><p>MLP:</p><math display="block"><msub><mi>ℎ</mi><mn>1</mn></msub><mo>=</mo><mi>𝜑</mi><mrow><mo>(</mo><mrow><msub><mi>𝑊</mi><mn>1</mn></msub><mi>𝑥</mi><mo>+</mo><msub><mi>𝑏</mi><mn>1</mn></msub></mrow><mo>)</mo></mrow><mo rspace="0em">,</mo><mspace width="1em"/><mover accent="true"><mi>𝑦</mi><mo>̂</mo></mover><mo>=</mo><msub><mi>𝑊</mi><mn>2</mn></msub><msub><mi>ℎ</mi><mn>1</mn></msub><mo>+</mo><msub><mi>𝑏</mi><mn>2</mn></msub></math><p>Para classificacao multiclasse, usamos softmax:</p><math display="block"><mi>𝑝</mi><mrow><mo>(</mo><mrow><mi>𝑦</mi><mo>=</mo><mi>𝑘</mi><mspace width="0.2222em"/><mo lspace="0em" rspace="0em">|</mo><mspace width="0.2222em"/><mi>𝑥</mi></mrow><mo>)</mo></mrow><mo>=</mo><mfrac><msup><mi>𝑒</mi><msub><mi>𝑧</mi><mi>𝑘</mi></msub></msup><msub><mo form="prefix" lspace="0em" rspace="0em">∑</mo><mi>𝑗</mi></msub></mfrac><msup><mi>𝑒</mi><msub><mi>𝑧</mi><mi>𝑗</mi></msub></msup></math><p>Cross-entropy:</p><math display="block"><mi>ℒ︀</mi><mo>=</mo><mo form="prefix">−</mo><mo form="prefix" lspace="0.16666666666666666em" rspace="0.16666666666666666em">log</mo><mi>𝑝</mi><mrow><mo>(</mo><mrow><mi>𝑦</mi><mo>=</mo><mi>𝑐</mi><mspace width="0.2222em"/><mo lspace="0em" rspace="0em">|</mo><mspace width="0.2222em"/><mi>𝑥</mi></mrow><mo>)</mo></mrow></math><pre><code data-lang="python"><span style="color: #d73948">import</span> torch
+<span style="color: #d73948">from</span> torch <span style="color: #d73948">import</span> nn
+
+model <span style="color: #d73948">=</span> nn.<span style="color: #4b69c6">Sequential</span>(
+    nn.<span style="color: #4b69c6">Linear</span>(<span style="color: #b60157">10</span>, <span style="color: #b60157">64</span>),
+    nn.<span style="color: #4b69c6">ReLU</span>(),
+    nn.<span style="color: #4b69c6">Linear</span>(<span style="color: #b60157">64</span>, <span style="color: #b60157">3</span>)
+)
+
+x <span style="color: #d73948">=</span> torch.<span style="color: #4b69c6">randn</span>(<span style="color: #b60157">32</span>, <span style="color: #b60157">10</span>)
+y <span style="color: #d73948">=</span> torch.<span style="color: #4b69c6">randint</span>(<span style="color: #b60157">0</span>, <span style="color: #b60157">3</span>, (<span style="color: #b60157">32</span>,))
+
+logits <span style="color: #d73948">=</span> <span style="color: #4b69c6">model</span>(x)
+loss <span style="color: #d73948">=</span> nn.<span style="color: #4b69c6">CrossEntropyLoss</span>()(logits, y)
+
+loss.<span style="color: #4b69c6">backward</span>()
+<span style="color: #4b69c6">print</span>(loss.<span style="color: #4b69c6">item</span>())</code></pre><h3>03. Convolutional Neural Networks + CNN Architectures</h3><p>CNNs exploram estrutura espacial. Em vez de conectar tudo com tudo, filtros pequenos percorrem a imagem.</p><p>Convolucao 2D simplificada:</p><math display="block"><msub><mi>𝑌</mi><mrow><mi>𝑖</mi><mo rspace="0em">,</mo><mi>𝑗</mi><mo rspace="0em">,</mo><mi>𝑘</mi></mrow></msub><mo>=</mo><msub><mi>𝑏</mi><mi>𝑘</mi></msub><mo>+</mo><munder><mo form="prefix" lspace="0em">∑</mo><mi>𝑐</mi></munder><munder><mo form="prefix" lspace="0em">∑</mo><mi>𝑢</mi></munder><munder><mo form="prefix" lspace="0em">∑</mo><mi>𝑣</mi></munder><msub><mi>𝑊</mi><mrow><mi>𝑢</mi><mo rspace="0em">,</mo><mi>𝑣</mi><mo rspace="0em">,</mo><mi>𝑐</mi><mo rspace="0em">,</mo><mi>𝑘</mi></mrow></msub><msub><mi>𝑋</mi><mrow><mi>𝑖</mi><mo lspace="0em" rspace="0em">+</mo><mi>𝑢</mi><mo rspace="0em">,</mo><mi>𝑗</mi><mo lspace="0em" rspace="0em">+</mo><mi>𝑣</mi><mo rspace="0em">,</mo><mi>𝑐</mi></mrow></msub></math><p>Intuicao:</p><ul><li>Filtros aprendem detectores locais: bordas, texturas, partes.</li><li>O mesmo filtro e reutilizado em varias posicoes: compartilhamento de pesos.</li><li>Isso reduz parametros e cria equivariancia a translacao.</li></ul><p>Tamanho da saida em uma dimensao:</p><math display="block"><mi>𝑂</mi><mo>=</mo><mrow><mo>⌊</mo><mfrac><mrow><mi>𝐼</mi><mo>+</mo><mn>2</mn><mi>𝑃</mi><mo>−</mo><mi>𝐾</mi></mrow><mi>𝑆</mi></mfrac><mo>⌋</mo></mrow><mo>+</mo><mn>1</mn></math><p>onde <math><mi>𝐼</mi></math> e entrada, <math><mi>𝑃</mi></math> padding, <math><mi>𝐾</mi></math> kernel e <math><mi>𝑆</mi></math> stride.</p><pre><code data-lang="python"><span style="color: #d73948">import</span> torch
+<span style="color: #d73948">from</span> torch <span style="color: #d73948">import</span> nn
+
+cnn <span style="color: #d73948">=</span> nn.<span style="color: #4b69c6">Sequential</span>(
+    nn.<span style="color: #4b69c6">Conv2d</span>(<span style="color: #b60157">3</span>, <span style="color: #b60157">16</span>, kernel_size<span style="color: #d73948">=</span><span style="color: #b60157">3</span>, padding<span style="color: #d73948">=</span><span style="color: #b60157">1</span>),
+    nn.<span style="color: #4b69c6">ReLU</span>(),
+    nn.<span style="color: #4b69c6">MaxPool2d</span>(<span style="color: #b60157">2</span>),
+    nn.<span style="color: #4b69c6">Conv2d</span>(<span style="color: #b60157">16</span>, <span style="color: #b60157">32</span>, kernel_size<span style="color: #d73948">=</span><span style="color: #b60157">3</span>, padding<span style="color: #d73948">=</span><span style="color: #b60157">1</span>),
+    nn.<span style="color: #4b69c6">ReLU</span>(),
+    nn.<span style="color: #4b69c6">AdaptiveAvgPool2d</span>((<span style="color: #b60157">1</span>, <span style="color: #b60157">1</span>)),
+    nn.<span style="color: #4b69c6">Flatten</span>(),
+    nn.<span style="color: #4b69c6">Linear</span>(<span style="color: #b60157">32</span>, <span style="color: #b60157">10</span>)
+)
+
+x <span style="color: #d73948">=</span> torch.<span style="color: #4b69c6">randn</span>(<span style="color: #b60157">8</span>, <span style="color: #b60157">3</span>, <span style="color: #b60157">64</span>, <span style="color: #b60157">64</span>)
+logits <span style="color: #d73948">=</span> <span style="color: #4b69c6">cnn</span>(x)
+<span style="color: #4b69c6">print</span>(logits.shape)  <span style="color: #74747c">#</span><span style="color: #74747c"> torch.Size([8, 10])</span></code></pre><p>Arquiteturas importantes:</p><ul><li>LeNet: CNN classica pequena para digitos.</li><li>AlexNet: ReLU, GPU, dropout; marco em ImageNet.</li><li>VGG: muitos filtros <math><mn>3</mn><mo lspace="0.2222222222222222em" rspace="0.2222222222222222em">×</mo><mn>3</mn></math>, arquitetura simples e profunda.</li><li>Inception/GoogLeNet: varios tamanhos de filtro em paralelo.</li><li>ResNet: conexoes residuais facilitam redes muito profundas.</li></ul><p>Bloco residual:</p><math display="block"><mi>𝑦</mi><mo>=</mo><mi>𝐹</mi><mrow><mo>(</mo><mi>𝑥</mi><mo>)</mo></mrow><mo>+</mo><mi>𝑥</mi></math><pre><code data-lang="python"><span style="color: #d73948">import</span> torch
+<span style="color: #d73948">from</span> torch <span style="color: #d73948">import</span> nn
+
+<span style="color: #d73948">class</span> <span style="color: #4b69c6">ResidualBlock</span>(<span style="color: #8b41b1">nn</span><span style="color: #8b41b1">.</span><span style="color: #8b41b1">Module</span>):
+    <span style="color: #d73948">def</span> <span style="color: #4b69c6">__init__</span>(self, channels):
+        <span style="color: #4b69c6">super</span>().<span style="color: #4b69c6">__init__</span>()
+        <span style="color: #d73948">self</span>.net <span style="color: #d73948">=</span> nn.<span style="color: #4b69c6">Sequential</span>(
+            nn.<span style="color: #4b69c6">Conv2d</span>(channels, channels, <span style="color: #b60157">3</span>, padding<span style="color: #d73948">=</span><span style="color: #b60157">1</span>),
+            nn.<span style="color: #4b69c6">BatchNorm2d</span>(channels),
+            nn.<span style="color: #4b69c6">ReLU</span>(),
+            nn.<span style="color: #4b69c6">Conv2d</span>(channels, channels, <span style="color: #b60157">3</span>, padding<span style="color: #d73948">=</span><span style="color: #b60157">1</span>),
+            nn.<span style="color: #4b69c6">BatchNorm2d</span>(channels),
+        )
+        <span style="color: #d73948">self</span>.act <span style="color: #d73948">=</span> nn.<span style="color: #4b69c6">ReLU</span>()
+
+    <span style="color: #d73948">def</span> <span style="color: #4b69c6">forward</span>(self, x):
+        <span style="color: #d73948">return</span> <span style="color: #d73948">self</span>.<span style="color: #4b69c6">act</span>(<span style="color: #d73948">self</span>.<span style="color: #4b69c6">net</span>(x) <span style="color: #d73948">+</span> x)</code></pre><h3>04. Training</h3><p>Treinar e repetir:</p><ol><li>forward: calcular <math><mover accent="true"><mi>𝑦</mi><mo>̂</mo></mover><mo>=</mo><msub><mi>𝑓</mi><mrow><mi>𝜃</mi><mrow><mo>(</mo><mi>𝑥</mi><mo>)</mo></mrow></mrow></msub></math></li><li>loss: medir <math><mi>ℒ︀</mi><mrow><mo>(</mo><mrow><mover accent="true"><mi>𝑦</mi><mo>̂</mo></mover><mo>,</mo><mi>𝑦</mi></mrow><mo>)</mo></mrow></math></li><li>backward: calcular gradientes <math><msub><mo>∇</mo><mi>𝜃</mi></msub><mi>ℒ︀</mi></math></li><li>update: alterar pesos</li></ol><p>Atualizacao basica por gradiente descendente:</p><math display="block"><msub><mi>𝜃</mi><mrow><mi>𝑡</mi><mo lspace="0em" rspace="0em">+</mo><mn>1</mn></mrow></msub><mo>=</mo><msub><mi>𝜃</mi><mi>𝑡</mi></msub><mo>−</mo><mi>𝜂</mi><msub><mo form="prefix">∇</mo><mi>𝜃</mi></msub><mi>ℒ︀</mi><mrow><mo>(</mo><msub><mi>𝜃</mi><mi>𝑡</mi></msub><mo>)</mo></mrow></math><p>Mini-batch SGD aproxima o gradiente usando poucos exemplos:</p><math display="block"><msub><mi>𝑔</mi><mi>𝑡</mi></msub><mo>=</mo><mfrac><mn>1</mn><mi>𝐵</mi></mfrac><munder><mo form="prefix">∑</mo><mrow><mi>𝑖</mi><mo lspace="0em" rspace="0em">∈</mo><mi>ℬ︀</mi></mrow></munder><msub><mo form="prefix">∇</mo><mi>𝜃</mi></msub><msub><mi>ℒ︀</mi><mrow><mi>𝑖</mi><mrow><mo>(</mo><msub><mi>𝜃</mi><mi>𝑡</mi></msub><mo>)</mo></mrow></mrow></msub></math><p>Pontos praticos:</p><ul><li>Normalizar entradas ajuda a estabilizar treino.</li><li>Inicializacao ruim pode matar gradientes.</li><li>BatchNorm reduz sensibilidade a escala interna.</li><li>Learning rate costuma importar mais que pequenos detalhes do modelo.</li></ul><pre><code data-lang="python"><span style="color: #d73948">import</span> torch
+<span style="color: #d73948">from</span> torch <span style="color: #d73948">import</span> nn
+
+model <span style="color: #d73948">=</span> nn.<span style="color: #4b69c6">Sequential</span>(nn.<span style="color: #4b69c6">Linear</span>(<span style="color: #b60157">10</span>, <span style="color: #b60157">64</span>), nn.<span style="color: #4b69c6">ReLU</span>(), nn.<span style="color: #4b69c6">Linear</span>(<span style="color: #b60157">64</span>, <span style="color: #b60157">3</span>))
+opt <span style="color: #d73948">=</span> torch.optim.<span style="color: #4b69c6">SGD</span>(model.<span style="color: #4b69c6">parameters</span>(), lr<span style="color: #d73948">=</span><span style="color: #b60157">0</span><span style="color: #b60157">.</span><span style="color: #b60157">1</span>)
+loss_fn <span style="color: #d73948">=</span> nn.<span style="color: #4b69c6">CrossEntropyLoss</span>()
+
+<span style="color: #d73948">for</span> step <span style="color: #d73948">in</span> <span style="color: #4b69c6">range</span>(<span style="color: #b60157">100</span>):
+    x <span style="color: #d73948">=</span> torch.<span style="color: #4b69c6">randn</span>(<span style="color: #b60157">32</span>, <span style="color: #b60157">10</span>)
+    y <span style="color: #d73948">=</span> torch.<span style="color: #4b69c6">randint</span>(<span style="color: #b60157">0</span>, <span style="color: #b60157">3</span>, (<span style="color: #b60157">32</span>,))
+
+    opt.<span style="color: #4b69c6">zero_grad</span>()
+    logits <span style="color: #d73948">=</span> <span style="color: #4b69c6">model</span>(x)
+    loss <span style="color: #d73948">=</span> <span style="color: #4b69c6">loss_fn</span>(logits, y)
+    loss.<span style="color: #4b69c6">backward</span>()
+    opt.<span style="color: #4b69c6">step</span>()</code></pre><h3>05. Optimization &amp; Generalization</h3><p>Otimizacao pergunta: como reduzir a loss de treino?</p><p>Generalizacao pergunta: o modelo aprendeu padroes ou decorou?</p><p>Momentum suaviza atualizacoes:</p><math display="block"><msub><mi>𝑣</mi><mrow><mi>𝑡</mi><mo lspace="0em" rspace="0em">+</mo><mn>1</mn></mrow></msub><mo>=</mo><mi>𝛽</mi><msub><mi>𝑣</mi><mi>𝑡</mi></msub><mo>+</mo><msub><mo form="prefix">∇</mo><mi>𝜃</mi></msub><mi>ℒ︀</mi><mrow><mo>(</mo><msub><mi>𝜃</mi><mi>𝑡</mi></msub><mo>)</mo></mrow></math><math display="block"><msub><mi>𝜃</mi><mrow><mi>𝑡</mi><mo lspace="0em" rspace="0em">+</mo><mn>1</mn></mrow></msub><mo>=</mo><msub><mi>𝜃</mi><mi>𝑡</mi></msub><mo>−</mo><mi>𝜂</mi><msub><mi>𝑣</mi><mrow><mi>𝑡</mi><mo lspace="0em" rspace="0em">+</mo><mn>1</mn></mrow></msub></math><p>Adam combina media de gradientes e de gradientes ao quadrado:</p><math display="block"><msub><mi>𝑚</mi><mi>𝑡</mi></msub><mo>=</mo><msub><mi>𝛽</mi><mn>1</mn></msub><msub><mi>𝑚</mi><mrow><mi>𝑡</mi><mo lspace="0em" rspace="0em">−</mo><mn>1</mn></mrow></msub><mo>+</mo><mrow><mo>(</mo><mrow><mn>1</mn><mo>−</mo><msub><mi>𝛽</mi><mn>1</mn></msub></mrow><mo>)</mo></mrow><msub><mi>𝑔</mi><mi>𝑡</mi></msub></math><math display="block"><msub><mi>𝑣</mi><mi>𝑡</mi></msub><mo>=</mo><msub><mi>𝛽</mi><mn>2</mn></msub><msub><mi>𝑣</mi><mrow><mi>𝑡</mi><mo lspace="0em" rspace="0em">−</mo><mn>1</mn></mrow></msub><mo>+</mo><mrow><mo>(</mo><mrow><mn>1</mn><mo>−</mo><msub><mi>𝛽</mi><mn>2</mn></msub></mrow><mo>)</mo></mrow><msubsup><mi>𝑔</mi><mi>𝑡</mi><mn>2</mn></msubsup></math><p>Regularizacao L2:</p><math display="block"><msub><mi>ℒ︀</mi><mtext>total</mtext></msub><mo>=</mo><msub><mi>ℒ︀</mi><mtext>data</mtext></msub><mo>+</mo><mi>𝜆</mi><msubsup><mrow><mo>‖</mo><mi>𝜃</mi><mo>‖</mo></mrow><mn>2</mn><mn>2</mn></msubsup></math><p>Dropout:</p><math display="block"><mover accent="true"><mi>ℎ</mi><mo>̃</mo></mover><mo>=</mo><mi>𝑚</mi><mo lspace="0.2222222222222222em" rspace="0.2222222222222222em">⋅</mo><mi>ℎ</mi><mo rspace="0em">,</mo><mspace width="1em"/><msub><mi>𝑚</mi><mi>𝑖</mi></msub><mo>∼</mo><mtext>Bernoulli</mtext><mrow><mo>(</mo><mi>𝑝</mi><mo>)</mo></mrow></math><pre><code data-lang="python"><span style="color: #d73948">import</span> torch
+<span style="color: #d73948">from</span> torch <span style="color: #d73948">import</span> nn
+
+model <span style="color: #d73948">=</span> nn.<span style="color: #4b69c6">Sequential</span>(
+    nn.<span style="color: #4b69c6">Linear</span>(<span style="color: #b60157">100</span>, <span style="color: #b60157">256</span>),
+    nn.<span style="color: #4b69c6">ReLU</span>(),
+    nn.<span style="color: #4b69c6">Dropout</span>(p<span style="color: #d73948">=</span><span style="color: #b60157">0</span><span style="color: #b60157">.</span><span style="color: #b60157">5</span>),
+    nn.<span style="color: #4b69c6">Linear</span>(<span style="color: #b60157">256</span>, <span style="color: #b60157">10</span>)
+)
+
+opt <span style="color: #d73948">=</span> torch.optim.<span style="color: #4b69c6">AdamW</span>(model.<span style="color: #4b69c6">parameters</span>(), lr<span style="color: #d73948">=</span><span style="color: #b60157">1e-3</span>, weight_decay<span style="color: #d73948">=</span><span style="color: #b60157">1e-4</span>)
+scheduler <span style="color: #d73948">=</span> torch.optim.lr_scheduler.<span style="color: #4b69c6">CosineAnnealingLR</span>(opt, T_max<span style="color: #d73948">=</span><span style="color: #b60157">50</span>)</code></pre><p>Checklist mental:</p><ul><li>loss de treino alta: underfitting, modelo fraco, LR ruim ou poucos epochs.</li><li>treino bom e validacao ruim: overfitting.</li><li>treino instavel: LR alto, dados mal escalados, batch pequeno ou inicializacao ruim.</li><li>validacao melhorando: continue.</li><li>validacao parou de melhorar: early stopping ou reduzir LR.</li></ul><h3>06. Semantic Segmentation</h3><p>Segmentacao semantica classifica cada pixel.</p><p>Entrada:</p><math display="block"><mi>𝑋</mi><mo>∈</mo><msup><mi>ℝ</mi><mrow><mi>𝐶</mi><mo lspace="0em" rspace="0em">×</mo><mi>𝐻</mi><mo lspace="0em" rspace="0em">×</mo><mi>𝑊</mi></mrow></msup></math><p>Saida:</p><math display="block"><mover accent="true"><mi>𝑌</mi><mo>̂</mo></mover><mo>∈</mo><msup><mi>ℝ</mi><mrow><mi>𝐾</mi><mo lspace="0em" rspace="0em">×</mo><mi>𝐻</mi><mo lspace="0em" rspace="0em">×</mo><mi>𝑊</mi></mrow></msup></math><p>onde <math><mi>𝐾</mi></math> e o numero de classes. Cada pixel recebe uma distribuicao sobre classes.</p><p>Loss por pixel:</p><math display="block"><mi>ℒ︀</mi><mo>=</mo><mo form="prefix">−</mo><mfrac><mn>1</mn><mrow><mi>𝐻</mi><mi>𝑊</mi></mrow></mfrac><munder><mo form="prefix">∑</mo><mrow><mi>𝑖</mi><mo rspace="0em">,</mo><mi>𝑗</mi></mrow></munder><mo form="prefix" lspace="0em" rspace="0.16666666666666666em">log</mo><mi>𝑝</mi><mrow><mo>(</mo><mrow><msub><mi>𝑦</mi><mrow><mi>𝑖</mi><mo rspace="0em">,</mo><mi>𝑗</mi></mrow></msub><mspace width="0.2222em"/><mo lspace="0em" rspace="0em">|</mo><mspace width="0.2222em"/><mi>𝑥</mi></mrow><mo>)</mo></mrow></math><p>IoU para uma classe:</p><math display="block"><mtext>IoU</mtext><mo>=</mo><mfrac><mtext>TP</mtext><mrow><mtext>TP</mtext><mo>+</mo><mtext>FP</mtext><mo>+</mo><mtext>FN</mtext></mrow></mfrac></math><p>Dice:</p><math display="block"><mtext>Dice</mtext><mo>=</mo><mfrac><mrow><mn>2</mn><mrow><mo>|</mo><mrow><mi>𝐴</mi><mo>∩</mo><mi>𝐵</mi></mrow><mo>|</mo></mrow></mrow><mrow><mrow><mo>|</mo><mi>𝐴</mi><mo>|</mo></mrow><mo>+</mo><mrow><mo>|</mo><mi>𝐵</mi><mo>|</mo></mrow></mrow></mfrac></math><p>Arquiteturas comuns:</p><ul><li>FCN: troca camadas densas por convolucoes e gera mapa denso.</li><li>U-Net: encoder comprime contexto, decoder recupera resolucao, skips preservam detalhe.</li><li>DeepLab: convolucoes dilatadas aumentam campo receptivo sem perder tanta resolucao.</li></ul><pre><code data-lang="python"><span style="color: #d73948">import</span> torch
+<span style="color: #d73948">from</span> torch <span style="color: #d73948">import</span> nn
+
+<span style="color: #d73948">class</span> <span style="color: #4b69c6">TinyUNet</span>(<span style="color: #8b41b1">nn</span><span style="color: #8b41b1">.</span><span style="color: #8b41b1">Module</span>):
+    <span style="color: #d73948">def</span> <span style="color: #4b69c6">__init__</span>(self, classes):
+        <span style="color: #4b69c6">super</span>().<span style="color: #4b69c6">__init__</span>()
+        <span style="color: #d73948">self</span>.enc <span style="color: #d73948">=</span> nn.<span style="color: #4b69c6">Sequential</span>(
+            nn.<span style="color: #4b69c6">Conv2d</span>(<span style="color: #b60157">3</span>, <span style="color: #b60157">16</span>, <span style="color: #b60157">3</span>, padding<span style="color: #d73948">=</span><span style="color: #b60157">1</span>),
+            nn.<span style="color: #4b69c6">ReLU</span>(),
+            nn.<span style="color: #4b69c6">Conv2d</span>(<span style="color: #b60157">16</span>, <span style="color: #b60157">16</span>, <span style="color: #b60157">3</span>, padding<span style="color: #d73948">=</span><span style="color: #b60157">1</span>),
+            nn.<span style="color: #4b69c6">ReLU</span>(),
+        )
+        <span style="color: #d73948">self</span>.pool <span style="color: #d73948">=</span> nn.<span style="color: #4b69c6">MaxPool2d</span>(<span style="color: #b60157">2</span>)
+        <span style="color: #d73948">self</span>.dec <span style="color: #d73948">=</span> nn.<span style="color: #4b69c6">Sequential</span>(
+            nn.<span style="color: #4b69c6">ConvTranspose2d</span>(<span style="color: #b60157">16</span>, <span style="color: #b60157">16</span>, <span style="color: #b60157">2</span>, stride<span style="color: #d73948">=</span><span style="color: #b60157">2</span>),
+            nn.<span style="color: #4b69c6">ReLU</span>(),
+            nn.<span style="color: #4b69c6">Conv2d</span>(<span style="color: #b60157">16</span>, classes, <span style="color: #b60157">1</span>)
+        )
+
+    <span style="color: #d73948">def</span> <span style="color: #4b69c6">forward</span>(self, x):
+        h <span style="color: #d73948">=</span> <span style="color: #d73948">self</span>.<span style="color: #4b69c6">enc</span>(x)
+        z <span style="color: #d73948">=</span> <span style="color: #d73948">self</span>.<span style="color: #4b69c6">pool</span>(h)
+        <span style="color: #d73948">return</span> <span style="color: #d73948">self</span>.<span style="color: #4b69c6">dec</span>(z)
+
+model <span style="color: #d73948">=</span> <span style="color: #4b69c6">TinyUNet</span>(classes<span style="color: #d73948">=</span><span style="color: #b60157">4</span>)
+x <span style="color: #d73948">=</span> torch.<span style="color: #4b69c6">randn</span>(<span style="color: #b60157">2</span>, <span style="color: #b60157">3</span>, <span style="color: #b60157">128</span>, <span style="color: #b60157">128</span>)
+y <span style="color: #d73948">=</span> torch.<span style="color: #4b69c6">randint</span>(<span style="color: #b60157">0</span>, <span style="color: #b60157">4</span>, (<span style="color: #b60157">2</span>, <span style="color: #b60157">128</span>, <span style="color: #b60157">128</span>))
+
+logits <span style="color: #d73948">=</span> <span style="color: #4b69c6">model</span>(x)
+loss <span style="color: #d73948">=</span> nn.<span style="color: #4b69c6">CrossEntropyLoss</span>()(logits, y)
+<span style="color: #4b69c6">print</span>(logits.shape, loss.<span style="color: #4b69c6">item</span>())</code></pre><h3>Resumo final</h3><p>Deep learning e a composicao de funcoes parametrizadas. Redes densas aprendem relacoes globais; CNNs exploram localidade e compartilhamento de pesos; treinamento ajusta parametros via gradientes; otimizacao busca reduzir a loss; generalizacao exige controlar overfitting; segmentacao leva classificacao do nivel da imagem para o nivel do pixel.</p>
+<!-- CONTENT:END -->
+    </section>
+
+  </main>
+
+
+</body>
+
+</html>
