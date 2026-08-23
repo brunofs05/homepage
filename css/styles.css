@@ -376,32 +376,13 @@ h3 {
   margin: 1rem 0rem -0.5rem 1rem;
 }
 
-.courses-like-tui {
-  /* classe para fazer as bordas das seçoes inspiradas */
-  /* no wlctl e no bluetui */
-
-  /* margin-left: auto; */
-  /* margin-right: auto; */
-
-  border-style: solid;
-  border-color: var(--border);
-  /* border-radius: 2%; */
-
-  /* top right botton left */
-  margin: 2rem 1rem 1rem 1rem;
-
-  padding: 0.5rem 0.5em 0.5rem 0.5rem;
-
-  /* se algum filho usar position absolute, ele será posicionado */
-  /* relativamente a mim */
-  position: relative;
-}
-
+/* aumentar a largura as anotacoes dos cursos */
+/* para melhorar a leitura e a escrita */
 .courses-main {
 
   /* pode ocupar todo espaço (100%) desde que */
   /* não ultrapasse o máximo conforável */
   width: 100%;
-  max-width: 800px;
+  max-width: 840px;
   padding: 0px 0px 0px 0px;
 }

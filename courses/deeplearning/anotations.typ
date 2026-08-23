@@ -1,4 +1,4 @@
-= Deep Learning - anotacoes
+= Deep Learning
 
 Referencia: Bishop, D2L e MIT conforme a lista de aulas.
 
@@ -25,6 +25,7 @@ Notas rapidas:
 - Generalizar significa ir bem em dados nao vistos, nao apenas memorizar treino.
 
 ```python
+
 import torch
 
 x = torch.randn(32, 10)      # batch com 32 exemplos e 10 atributos
@@ -68,6 +69,7 @@ cal(L) = -log p(y = c | x)
 $
 
 ```python
+
 import torch
 from torch import nn
 
