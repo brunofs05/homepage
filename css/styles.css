@@ -1,3 +1,7 @@
+/* Fonte académica serifada — próxima ao Computer Modern do Typst/LaTeX */
+/* STIX Two Text cobre texto corrido e inline math; STIX Two Math cobre display math */
+@import url('https://fonts.googleapis.com/css2?family=STIX+Two+Text:ital,wght@0,400..700;1,400..700&display=swap');
+
 /* --- INDEX GERAL CONFIG --- */
 
 
@@ -121,6 +125,7 @@
     /* border-color: var(--border); */
 
     margin-bottom: -0.5rem;
+    margin-top: -0.5rem;
   }
 
   h2 {
@@ -189,24 +194,9 @@
   }
 
   /* --- PÁGINA EM CONSTRUÇÃO --- */
-
-  /* Container centralizado dentro do .like-tui */
-  .todo-page-content {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    padding: 3rem 2rem;
-    gap: 1rem;
-    text-align: center;
-    opacity: 0.6;
-  }
-
   /* Texto principal de "em construção" */
   .todo-label {
-    font-size: 1.1rem;
-    letter-spacing: 0.05rem;
-    margin: 0;
+    margin: 0.5rem 1rem 1rem 1rem;
   }
 
 
@@ -367,10 +357,8 @@
   }
 
   /* --- DSAI GENERAL CONFIGS --- */
-  h3 {
-    font-size: 1.1rem;
-    font-weight: 400;
-    margin: 1rem 0rem -0.5rem 1rem;
+  .sublist {
+    padding: 0.5rem 1rem 1rem 1rem;
   }
 
   /* aumentar a largura as anotacoes dos cursos */
@@ -390,6 +378,50 @@
     border-radius: 4px;
     overflow-x: auto;
     font-family: "Fira Code", monospace;
+  }
+
+  /* --- NOTE-CONTENT: TIPOGRAFIA ACADÊMICA --- */
+  /* Texto corrido dentro das anotações usa fonte serifada, */
+  /* próxima ao Computer Modern do Typst/LaTeX, sem afetar o restante do site */
+
+  .note-content {
+    font-family: "STIX Two Text", Georgia, "Times New Roman", serif;
+    font-size: 1rem;
+    line-height: 1.7;
+  }
+
+  /* h2 e h3 internos ao conteúdo voltam para monospace, consistente com o site */
+  .note-content h2,
+  .note-content h3 {
+    font-family:
+      "Cascadia Mono",
+      "SFMono-Regular",
+      "Consolas",
+      "Liberation Mono",
+      monospace;
+  }
+
+  /* blocos de código permanecem monospace — já herdado do pre global, */
+  /* mas explicitado aqui para clareza */
+  .note-content pre,
+  .note-content code {
+    font-family: "Fira Code", "Cascadia Mono", monospace;
+    font-size: 0.9rem;
+  }
+
+  /* MathML: força STIX Two Text que inclui glifos matemáticos de qualidade */
+  /* Isso melhora espessura de linha, espaçamento e estilo das fórmulas */
+  .note-content math {
+    font-family: "STIX Two Text", serif;
+    font-size: 1.05em;
+  }
+
+  /* Fórmulas em display block: espaçamento vertical adequado para leitura */
+  .note-content math[display="block"] {
+    display: block;
+    margin: 1.2em auto;
+    text-align: center;
+    overflow-x: auto;
   }
 
   /* --- TOGGLES (DETAILS / SUMMARY) --- */
