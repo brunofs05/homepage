@@ -1,19 +1,20 @@
 #!/usr/bin/env bash
 set -euo pipefail
 
-course="$1"                       
-dir="courses/$course"
-typ="$dir/anotations.typ"
-bone="$dir/bone.html"
-out="$dir/index.html"
-tmp="$dir/.typst-out.html"
+merge_course() {
+  local course="$1"
+  local dir="courses/$course"
+  local typ="$dir/anotations.typ"
+  local bone="$dir/bone.html"
+  local out="$dir/index.html"
+  local tmp="$dir/.typst-out.html"
 
-[ -f "$typ" ]  || { echo "não achei $typ"; exit 1; }
-[ -f "$bone" ] || { echo "não achei $bone"; exit 1; }
+  [ -f "$typ" ]  || { echo "não achei $typ"; return 1; }
+  [ -f "$bone" ] || { echo "não achei $bone"; return 1; }
 
-typst compile "$typ" "$tmp" --features html
+  typst compile "$typ" "$tmp" --features html
 
-python3 - "$tmp" "$bone" "$out" <<'PYEOF'
+  python3 - "$tmp" "$bone" "$out" <<'PYEOF'
 import re, sys
 tmp, bone, out = sys.argv[1:4]
 
@@ -32,5 +33,19 @@ merged = pattern.sub(f"{start}\n{content}\n{end}", skeleton)
 open(out, "w", encoding="utf-8").write(merged)
 PYEOF
 
-rm -f "$tmp"
-echo "gerado: $out"
+  rm -f "$tmp"
+  echo "gerado: $out"
+}
+
+if [ $# -gt 0 ]; then
+  # Curso específico passado como argumento
+  merge_course "$1"
+else
+  # Processa todos os cursos dentro de courses/
+  [ -d "courses" ] || { echo "pasta 'courses' não encontrada"; exit 1; }
+  for dir in courses/*/; do
+    course="$(basename "$dir")"
+    echo "→ processando: $course"
+    merge_course "$course" || echo "⚠ erro ao processar: $course"
+  done
+fi
