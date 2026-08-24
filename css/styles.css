@@ -8,381 +8,415 @@
     /* -- é obrigatório para declarar Custom Property, as */
     /* variáveis no css */
     /* aqui também é implícito que esse é o tema padrao*/
-
-    --background: black;
-    --foreground: white;
-    --border: white;
-    --title: white;
-    --todo: darkgrey;
-    --modal-background: black;
+    --background: #181918;
+    --foreground: #deded9;
+    --border: #3a3b38;
+    --title: #f0f0eb;
+    --todo: #a0a09a;
+    --modal-background: #20211f;
   }
-}
 
-[data-theme="dark"] {
-  --background: black;
-  --foreground: white;
-  --border: white;
-  --title: white;
-  --todo: darkgrey;
-  --modal-background: black;
-}
+  [data-theme="dark"] {
+    --background: #181918;
+    --foreground: #deded9;
+    --border: #3a3b38;
+    --title: #f0f0eb;
+    --todo: #a0a09a;
+    --modal-background: #20211f;
+  }
 
-[data-theme="light"] {
-  --background: white;
-  --foreground: black;
-  --border: black;
-  --title: black;
-  --todo: dimgrey;
-  --modal-background: white;
+  [data-theme="light"] {
+    --background: #f7f7f5;
+    --foreground: #242424;
+    --border: #d6d6d2;
+    --title: #181818;
+    --todo: #666666;
+    --modal-background: #f2f2ef;
+  }
 
-}
+  * {
+    /* Config para width height incluam o tamanho da do elemento como */
+    /* a soma entre o content, padding, border */
+    box-sizing: border-box;
+  }
 
-* {
-  /* Config para width height incluam o tamanho da do elemento como */
-  /* a soma entre o content, padding, border */
-  box-sizing: border-box;
-}
+  html {
+    font-family:
+      "Cascadia Mono",
+      "SFMono-Regular",
+      "Consolas",
+      "Liberation Mono",
+      monospace;
+    font-size: 16px;
+    /* font-weight: 400; */
+  }
 
-html {
-  font-family:
-    "Cascadia Mono",
-    "SFMono-Regular",
-    "Consolas",
-    "Liberation Mono",
-    monospace;
-  font-size: 16px;
-  /* font-weight: 400; */
-}
+  body {
 
-body {
+    /* impoem as tags filhas, um sistema de eixos: */
+    /* - princial: da esquerda par direita */
+    /* - cruzado: de cima para baixo */
+    display: flex;
 
-  /* impoem as tags filhas, um sistema de eixos: */
-  /* - princial: da esquerda par direita */
-  /* - cruzado: de cima para baixo */
-  display: flex;
+    /* faz o body ser toda altura do navegador */
+    /* vh := viewport height */
+    /* 1vh = 1% da altura visível da tela dispositivo */
+    min-height: 100vh;
 
-  /* faz o body ser toda altura do navegador */
-  /* vh := viewport height */
-  /* 1vh = 1% da altura visível da tela dispositivo */
-  min-height: 100vh;
+    /* o fluxo principal agora é colunar, ou seja */
+    /* inverteu o principal com o cruzado no sistema de eixos */
+    flex-direction: column;
 
-  /* o fluxo principal agora é colunar, ou seja */
-  /* inverteu o principal com o cruzado no sistema de eixos */
-  flex-direction: column;
+    /* centraliza o conteúdo considerando */
+    /* o fluxo principal definido no flex-direction */
+    /* justify-content: center; */
 
-  /* centraliza o conteúdo considerando */
-  /* o fluxo principal definido no flex-direction */
-  /* justify-content: center; */
+    /* centraliza o conteúdo considerando */
+    /* o fluxo secundário definido no flex-direction */
+    align-items: center;
 
-  /* centraliza o conteúdo considerando */
-  /* o fluxo secundário definido no flex-direction */
-  align-items: center;
+    /* remove margens padroes do navegador */
+    margin: 0;
 
-  /* remove margens padroes do navegador */
-  margin: 0;
-
-  /* coloca um espaçamento na parte de cima, sem centralizar, */
-  /* mas deixando um espaço proporcional ao "campo de visão" */
-  padding-top: 10vh;
+    /* coloca um espaçamento na parte de cima, sem centralizar, */
+    /* mas deixando um espaço proporcional ao "campo de visão" */
+    padding-top: 10vh;
 
 
-  /* puxam as variáveis definidas no root */
-  background: var(--background);
-  color: var(--foreground);
-}
+    /* puxam as variáveis definidas no root */
+    background: var(--background);
+    color: var(--foreground);
+  }
 
-.like-tui {
-  /* classe para fazer as bordas das seçoes inspiradas */
-  /* no wlctl e no bluetui */
+  .like-tui {
+    /* classe para fazer as bordas das seçoes inspiradas */
+    /* no wlctl e no bluetui */
 
-  /* margin-left: auto; */
-  /* margin-right: auto; */
+    /* margin-left: auto; */
+    /* margin-right: auto; */
 
-  border-style: solid;
-  border-color: var(--border);
-  /* border-radius: 2%; */
+    border-style: solid;
+    border-color: var(--border);
+    /* border-radius: 2%; */
 
-  /* top right botton left */
-  margin: 2rem 1rem 1rem 1rem;
+    /* top right botton left */
+    margin: 2rem 1rem 1rem 1rem;
 
-  padding: 0.5rem 0.5em 0.5rem 0.5rem;
+    padding: 0.5rem 0.5em 0.5rem 0.5rem;
 
-  /* se algum filho usar position absolute, ele será posicionado */
-  /* relativamente a mim */
-  position: relative;
-}
+    /* se algum filho usar position absolute, ele será posicionado */
+    /* relativamente a mim */
+    position: relative;
+  }
 
-h1 {
-  /* o rem é relacionado ao tamanho do font-size do html, */
-  /* aqui 1.75 x html font-size */
-  font-size: 1.75rem;
-  /* font-weight: normal; */
-  color: var(--title);
-  /* test colors */
+  h1 {
+    /* o rem é relacionado ao tamanho do font-size do html, */
+    /* aqui 1.75 x html font-size */
+    font-size: 1.75rem;
+    /* font-weight: normal; */
+    color: var(--title);
+    /* test colors */
 
-  /* border-style: solid; */
-  /* border-color: var(--border); */
+    /* border-style: solid; */
+    /* border-color: var(--border); */
 
-  margin-bottom: -0.5rem;
-}
+    margin-bottom: -0.5rem;
+  }
 
-h2 {
-  font-size: 1.22rem;
-  /* font-weight: normal; */
-  position: absolute;
-  top: -2rem;
-  left: 0.75rem;
-  background: var(--background);
-  padding: 0.5%;
-  padding-left: 0.4rem;
-  padding-right: 0.4rem;
-  /* border-style: solid; */
-  /* border-color: var(--border); */
+  h2 {
+    font-size: 1.22rem;
+    /* font-weight: normal; */
+    position: absolute;
+    top: -2rem;
+    left: 0.75rem;
+    background: var(--background);
+    padding: 0.5%;
+    padding-left: 0.4rem;
+    padding-right: 0.4rem;
+    /* border-style: solid; */
+    /* border-color: var(--border); */
 
-}
+  }
 
-a {
-  /* torna o link com a mesma cor do pai */
-  color: inherit;
+  a {
+    /* torna o link com a mesma cor do pai */
+    color: inherit;
 
-  /* remove o sublinhado */
-  text-decoration: none;
-}
+    /* remove o sublinhado */
+    text-decoration: none;
+  }
 
-ul {
-  /* remove a bolinha decorativa das listas */
-  list-style: none;
-}
+  ul {
+    /* remove a bolinha decorativa das listas */
+    list-style: none;
+  }
 
-li {
-  padding: 0.04rem;
-}
+  li {
+    padding: 0.04rem;
+  }
 
-main {
+  main {
 
-  /* pode ocupar todo espaço (100%) desde que */
-  /* não ultrapasse o máximo conforável */
-  width: 100%;
-  max-width: 630px;
-  padding: 0px 0px 0px 0px;
-}
+    /* pode ocupar todo espaço (100%) desde que */
+    /* não ultrapasse o máximo conforável */
+    width: 100%;
+    max-width: 630px;
+    padding: 0px 0px 0px 0px;
+  }
 
-p {
-  text-align: justify;
-  padding-right: 2.5rem;
-  padding-left: 2.5rem;
-}
+  p {
+    text-align: justify;
+    padding-right: 2.5rem;
+    padding-left: 2.5rem;
+  }
 
-/* Aplica cinza no li e desabilita o clique no link */
-li.todo {
-  color: var(--todo);
-  /* background: grey; */
-}
+  /* Aplica cinza no li e desabilita o clique no link */
+  li.todo {
+    color: var(--todo);
+    /* background: grey; */
+  }
 
-li.todo a {
-  pointer-events: none;
-  cursor: default;
-}
+  li.todo a {
+    pointer-events: none;
+    cursor: default;
+  }
 
-/* Badge "[em breve] := comming soon" aparece depois do texto do link */
-li.todo::after {
-  content: " [comming soon]";
-  font-size: 0.75rem;
-  opacity: 0.7;
-}
+  /* Badge "[em breve] := comming soon" aparece depois do texto do link */
+  li.todo::after {
+    content: " [comming soon]";
+    font-size: 0.75rem;
+    opacity: 0.7;
+  }
 
-/* --- PÁGINA EM CONSTRUÇÃO --- */
+  /* --- PÁGINA EM CONSTRUÇÃO --- */
 
-/* Container centralizado dentro do .like-tui */
-.todo-page-content {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  padding: 3rem 2rem;
-  gap: 1rem;
-  text-align: center;
-  opacity: 0.6;
-}
+  /* Container centralizado dentro do .like-tui */
+  .todo-page-content {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 3rem 2rem;
+    gap: 1rem;
+    text-align: center;
+    opacity: 0.6;
+  }
 
-/* Texto principal de "em construção" */
-.todo-label {
-  font-size: 1.1rem;
-  letter-spacing: 0.05rem;
-  margin: 0;
-}
+  /* Texto principal de "em construção" */
+  .todo-label {
+    font-size: 1.1rem;
+    letter-spacing: 0.05rem;
+    margin: 0;
+  }
 
 
 
-/* --- PHOTOS SECTION --- */
+  /* --- PHOTOS SECTION --- */
 
-/* O Grid que organiza as fotos */
-.photo-grid {
-  /* Ativa o grid */
-  display: grid;
-  /* Cria colunas responsivas: No mínimo 150px de largura, 
+  /* O Grid que organiza as fotos */
+  .photo-grid {
+    /* Ativa o grid */
+    display: grid;
+    /* Cria colunas responsivas: No mínimo 150px de largura, 
      se sobrar espaço, distribui igualmente (1fr) */
-  grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
-  gap: 1rem;
-  /* Espaço entre os itens */
-  padding: 1rem;
-  margin: 0;
-}
+    grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+    gap: 1rem;
+    /* Espaço entre os itens */
+    padding: 1rem;
+    margin: 0;
+  }
 
-/* O botão que envolve cada foto */
-.photo-btn {
-  /* Tira todo o estilo padrão de botão, deixando ele invisível, só clicável */
-  background: none;
-  border: none;
-  padding: 0;
-  width: 100%;
-  cursor: pointer;
-  color: inherit;
-  font-family: inherit;
-  transition: opacity 0.2s ease;
-}
+  /* O botão que envolve cada foto */
+  .photo-btn {
+    /* Tira todo o estilo padrão de botão, deixando ele invisível, só clicável */
+    background: none;
+    border: none;
+    padding: 0;
+    width: 100%;
+    cursor: pointer;
+    color: inherit;
+    font-family: inherit;
+    transition: opacity 0.2s ease;
+  }
 
-/* Estilo para que o focus no botão fique visível pro teclado */
-.photo-btn:focus-visible {
-  outline: 2px solid var(--border);
-  outline-offset: 4px;
-}
+  /* Estilo para que o focus no botão fique visível pro teclado */
+  .photo-btn:focus-visible {
+    outline: 2px solid var(--border);
+    outline-offset: 4px;
+  }
 
-/* Container do preview (figura) */
-.photo-btn figure {
-  margin: 0;
-  display: flex;
-  flex-direction: column;
-  /* Segue a sua borda tui */
-  border: 1px solid var(--border);
-  background: var(--background);
-  transition: transform 0.2s ease;
-}
+  /* Container do preview (figura) */
+  .photo-btn figure {
+    margin: 0;
+    display: flex;
+    flex-direction: column;
+    /* Segue a sua borda tui */
+    border: 1px solid var(--border);
+    background: var(--background);
+    transition: transform 0.2s ease;
+  }
 
-/* Efeitinho legal quando passa o mouse por cima do grid */
-.photo-btn:hover figure {
-  transform: translateY(-2px);
-}
+  /* Efeitinho legal quando passa o mouse por cima do grid */
+  .photo-btn:hover figure {
+    transform: translateY(-2px);
+  }
 
-/* A miniatura em si */
-.photo-btn img {
-  width: 100%;
-  /* Fixamos uma altura pra formar os "quadradinhos" */
-  height: 150px;
-  /* Cover impede que a foto amasse, cortando as sobras se precisar */
-  object-fit: cover;
-}
+  /* A miniatura em si */
+  .photo-btn img {
+    width: 100%;
+    /* Fixamos uma altura pra formar os "quadradinhos" */
+    height: 150px;
+    /* Cover impede que a foto amasse, cortando as sobras se precisar */
+    object-fit: cover;
+  }
 
-/* O footer de cada item (data) */
-.photo-btn figcaption {
-  padding: 0.5rem;
-  border-top: 1px solid var(--border);
-  text-align: center;
-  font-size: 0.9rem;
-}
+  /* O footer de cada item (data) */
+  .photo-btn figcaption {
+    padding: 0.5rem;
+    border-top: 1px solid var(--border);
+    text-align: center;
+    font-size: 0.9rem;
+  }
 
-/* --- MODAL (DIALOG) --- */
+  /* --- MODAL (DIALOG) --- */
 
-/* Estiliza o próprio balão do modal */
-#photo-modal {
-  /* Reseta os padrões do navegador pro dialog */
-  color: var(--foreground);
-  background: var(--background);
-  /* Usa as variáveis que vc já criou na classe .like-tui */
-  border: 1px solid var(--border);
-  margin: auto;
-  max-width: 90vw;
-  max-height: 90vh;
-  padding: 1rem;
-}
+  /* Estiliza o próprio balão do modal */
+  #photo-modal {
+    /* Reseta os padrões do navegador pro dialog */
+    color: var(--foreground);
+    background: var(--background);
+    /* Usa as variáveis que vc já criou na classe .like-tui */
+    border: 1px solid var(--border);
+    margin: auto;
+    max-width: 90vw;
+    max-height: 90vh;
+    padding: 1rem;
+  }
 
-/* ::backdrop é a "tela preta" semi-transparente que fica atrás do modal */
-#photo-modal::backdrop {
-  /* background: rgba(0, 0, 0, 0.8); */
-  background: var(--modal-background);
-}
+  /* ::backdrop é a "tela preta" semi-transparente que fica atrás do modal */
+  #photo-modal::backdrop {
+    /* background: rgba(0, 0, 0, 0.8); */
+    background: var(--modal-background);
+  }
 
-/* O botão de fechar */
-.close-btn {
-  background: var(--background);
-  color: var(--foreground);
-  border: 1px solid var(--border);
-  padding: 0.25rem 0.5rem;
-  cursor: pointer;
-  font-family: monospace;
-  position: absolute;
-  top: 1rem;
-  right: 1rem;
-}
+  /* O botão de fechar */
+  .close-btn {
+    background: var(--background);
+    color: var(--foreground);
+    border: 1px solid var(--border);
+    padding: 0.25rem 0.5rem;
+    cursor: pointer;
+    font-family: monospace;
+    position: absolute;
+    top: 1rem;
+    right: 1rem;
+  }
 
-.close-btn:hover {
-  background: var(--foreground);
-  color: var(--background);
-}
+  .close-btn:hover {
+    background: var(--foreground);
+    color: var(--background);
+  }
 
-/* Estrutura interna do Modal */
-.modal-content {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: 1rem;
-  margin-top: 2rem;
-}
+  /* Estrutura interna do Modal */
+  .modal-content {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 1rem;
+    margin-top: 2rem;
+  }
 
-/* A foto em tamanho real */
-#modal-image {
-  max-width: 100%;
-  /* A imagem não pode ultrapassar 60% da altura da tela, sobrando espaço pro texto */
-  max-height: 60vh;
-  /* contain mostra a foto inteira sem cortar */
-  object-fit: contain;
-  border: 1px solid var(--border);
-}
+  /* A foto em tamanho real */
+  #modal-image {
+    max-width: 100%;
+    /* A imagem não pode ultrapassar 60% da altura da tela, sobrando espaço pro texto */
+    max-height: 60vh;
+    /* contain mostra a foto inteira sem cortar */
+    object-fit: contain;
+    border: 1px solid var(--border);
+  }
 
-/* Footer maximizado (Metadados) */
-.modal-footer {
-  width: 100%;
-  border-top: 1px solid var(--border);
-  padding-top: 1rem;
-}
+  /* Footer maximizado (Metadados) */
+  .modal-footer {
+    width: 100%;
+    border-top: 1px solid var(--border);
+    padding-top: 1rem;
+  }
 
-.modal-footer h3 {
-  margin-top: 0;
-  font-size: 1.1rem;
-}
+  .modal-footer h3 {
+    margin-top: 0;
+    font-size: 1.1rem;
+  }
 
-/* Definition List para os Metadados (dt=Key, dd=Value) */
-.modal-footer dl {
-  display: grid;
-  /* Grade com 2 colunas: a Chave (auto) e o Valor (1fr) */
-  grid-template-columns: auto 1fr;
-  gap: 0.5rem 1rem;
-  margin: 0;
-  font-size: 0.9rem;
-}
+  /* Definition List para os Metadados (dt=Key, dd=Value) */
+  .modal-footer dl {
+    display: grid;
+    /* Grade com 2 colunas: a Chave (auto) e o Valor (1fr) */
+    grid-template-columns: auto 1fr;
+    gap: 0.5rem 1rem;
+    margin: 0;
+    font-size: 0.9rem;
+  }
 
-.modal-footer dt {
-  font-weight: bold;
-}
+  .modal-footer dt {
+    font-weight: bold;
+  }
 
-.modal-footer dd {
-  margin: 0;
-}
+  .modal-footer dd {
+    margin: 0;
+  }
 
-/* --- DSAI GENERAL CONFIGS --- */
-h3 {
-  font-size: 1.1rem;
-  font-weight: 400;
-  margin: 1rem 0rem -0.5rem 1rem;
-}
+  /* --- DSAI GENERAL CONFIGS --- */
+  h3 {
+    font-size: 1.1rem;
+    font-weight: 400;
+    margin: 1rem 0rem -0.5rem 1rem;
+  }
 
-/* aumentar a largura as anotacoes dos cursos */
-/* para melhorar a leitura e a escrita */
-.courses-main {
+  /* aumentar a largura as anotacoes dos cursos */
+  /* para melhorar a leitura e a escrita */
+  .courses-main {
 
-  /* pode ocupar todo espaço (100%) desde que */
-  /* não ultrapasse o máximo conforável */
-  width: 100%;
-  max-width: 840px;
-  padding: 0px 0px 0px 0px;
-}
+    /* pode ocupar todo espaço (100%) desde que */
+    /* não ultrapasse o máximo conforável */
+    width: 100%;
+    max-width: 840px;
+    padding: 0px 0px 0px 0px;
+  }
+
+  pre {
+    background: var(--bg-code, #1e1e1e);
+    padding: 1rem;
+    border-radius: 4px;
+    overflow-x: auto;
+    font-family: "Fira Code", monospace;
+  }
+
+  /* --- TOGGLES (DETAILS / SUMMARY) --- */
+
+  /* Remove o marker padrão do navegador (triângulo) */
+  details>summary {
+    list-style: none;
+    cursor: pointer;
+  }
+
+  /* Firefox */
+  details>summary::-webkit-details-marker {
+    display: none;
+  }
+
+  /* Prefixo textual [+] quando fechado, [-] quando aberto */
+  details>summary::before {
+    content: "[+] ";
+    font-size: 0.85rem;
+    opacity: 0.7;
+  }
+
+  details[open]>summary::before {
+    content: "[-] ";
+  }
+
+  /* Indenta o conteúdo expandido */
+  details>*:not(summary) {
+    margin-left: 1.5rem;
+  }

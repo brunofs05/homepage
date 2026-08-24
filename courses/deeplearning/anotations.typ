@@ -25,7 +25,6 @@ Notas rapidas:
 - Generalizar significa ir bem em dados nao vistos, nao apenas memorizar treino.
 
 ```python
-
 import torch
 
 x = torch.randn(32, 10)      # batch com 32 exemplos e 10 atributos
@@ -114,6 +113,7 @@ $
 onde $I$ e entrada, $P$ padding, $K$ kernel e $S$ stride.
 
 ```python
+
 import torch
 from torch import nn
 
@@ -148,6 +148,7 @@ y = F(x) + x
 $
 
 ```python
+
 import torch
 from torch import nn
 
@@ -196,6 +197,7 @@ Pontos praticos:
 - Learning rate costuma importar mais que pequenos detalhes do modelo.
 
 ```python
+
 import torch
 from torch import nn
 
@@ -253,6 +255,7 @@ tilde(h) = m dot.op h, quad m_i ~ "Bernoulli"(p)
 $
 
 ```python
+
 import torch
 from torch import nn
 
@@ -318,6 +321,7 @@ Arquiteturas comuns:
 - DeepLab: convolucoes dilatadas aumentam campo receptivo sem perder tanta resolucao.
 
 ```python
+
 import torch
 from torch import nn
 
