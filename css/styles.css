@@ -18,6 +18,8 @@
     --title: #f0f0eb;
     --todo: #a0a09a;
     --modal-background: #20211f;
+    --code-background: #252624;
+    --code-foreground: #deded9;
   }
 
   [data-theme="dark"] {
@@ -27,6 +29,8 @@
     --title: #f0f0eb;
     --todo: #a0a09a;
     --modal-background: #20211f;
+    --code-background: #252624;
+    --code-foreground: #deded9;
   }
 
   [data-theme="light"] {
@@ -36,6 +40,8 @@
     --title: #181818;
     --todo: #666666;
     --modal-background: #f2f2ef;
+    --code-background: #eeeeeb;
+    --code-foreground: #292927;
   }
 
   * {
@@ -104,9 +110,9 @@
     /* border-radius: 2%; */
 
     /* top right botton left */
-    margin: 2rem 1rem 1rem 1rem;
+    margin: 1.6rem 1rem 1rem 1rem;
 
-    padding: 0.5rem 0.5em 0.5rem 0.5rem;
+    padding: 0.2rem 0.5em 0.2rem 0.5rem;
 
     /* se algum filho usar position absolute, ele será posicionado */
     /* relativamente a mim */
@@ -124,7 +130,7 @@
     /* border-style: solid; */
     /* border-color: var(--border); */
 
-    margin-bottom: -0.5rem;
+    margin-bottom: -0.3rem;
     margin-top: -0.5rem;
   }
 
@@ -158,6 +164,28 @@
 
   li {
     padding: 0.04rem;
+  }
+
+  /* --- TOGGLES GLOBAIS (home / nav) --- */
+
+  details>summary {
+    list-style: none;
+    cursor: pointer;
+    user-select: none;
+  }
+
+  details>summary::-webkit-details-marker {
+    display: none;
+  }
+
+  details>summary::before {
+    content: "[+] ";
+    font-size: 0.85rem;
+    opacity: 0.6;
+  }
+
+  details[open]>summary::before {
+    content: "[-] ";
   }
 
   main {
@@ -361,6 +389,10 @@
     padding: 0.5rem 1rem 1rem 1rem;
   }
 
+  .sublist li {
+    padding: 0.1rem;
+  }
+
   /* aumentar a largura as anotacoes dos cursos */
   /* para melhorar a leitura e a escrita */
   .courses-main {
@@ -368,17 +400,31 @@
     /* pode ocupar todo espaço (100%) desde que */
     /* não ultrapasse o máximo conforável */
     width: 100%;
-    max-width: 840px;
+    max-width: 850px;
     padding: 0px 0px 0px 0px;
   }
 
-  pre {
-    background: var(--bg-code, #1e1e1e);
-    padding: 1rem;
-    border-radius: 4px;
-    overflow-x: auto;
-    font-family: "Fira Code", monospace;
+  .courses-like-tui {
+    /* classe para fazer as bordas das seçoes inspiradas */
+    /* no wlctl e no bluetui */
+
+    /* margin-left: auto; */
+    /* margin-right: auto; */
+
+    border-style: solid;
+    border-color: var(--border);
+    /* border-radius: 2%; */
+
+    /* top right botton left */
+    margin: 1.6rem 1rem 1rem 1rem;
+
+    padding: 1.3rem 0.5em 1.3rem 0.5rem;
+
+    /* se algum filho usar position absolute, ele será posicionado */
+    /* relativamente a mim */
+    position: relative;
   }
+
 
   /* --- NOTE-CONTENT: TIPOGRAFIA ACADÊMICA --- */
   /* Texto corrido dentro das anotações usa fonte serifada, */
@@ -386,7 +432,7 @@
 
   .note-content {
     font-family: "STIX Two Text", Georgia, "Times New Roman", serif;
-    font-size: 1rem;
+    font-size: 1.1rem;
     line-height: 1.7;
   }
 
@@ -399,21 +445,33 @@
       "Consolas",
       "Liberation Mono",
       monospace;
+    /* alinha com o recuo dos parágrafos */
+    margin-left: 2.5rem;
+    margin-right: 2.5rem;
+    margin-bottom: -0.5rem;
   }
 
   /* blocos de código permanecem monospace — já herdado do pre global, */
   /* mas explicitado aqui para clareza */
-  .note-content pre,
-  .note-content code {
+  .note-content pre {
     font-family: "Fira Code", "Cascadia Mono", monospace;
-    font-size: 0.9rem;
+    font-size: 1rem;
+    background: var(--code-background);
+    color: var(--code-foreground);
+    padding: 0.8rem;
+    border-radius: 4px;
+    overflow-x: auto;
+    margin-left: 2.5rem;
+    margin-right: 2.5rem;
+
   }
+
 
   /* MathML: força STIX Two Text que inclui glifos matemáticos de qualidade */
   /* Isso melhora espessura de linha, espaçamento e estilo das fórmulas */
   .note-content math {
     font-family: "STIX Two Text", serif;
-    font-size: 1.05em;
+    font-size: 1.1rem;
   }
 
   /* Fórmulas em display block: espaçamento vertical adequado para leitura */
@@ -424,31 +482,59 @@
     overflow-x: auto;
   }
 
-  /* --- TOGGLES (DETAILS / SUMMARY) --- */
+  /* --- DIVIDER (HR) dentro de .note-content --- */
 
-  /* Remove o marker padrão do navegador (triângulo) */
-  details>summary {
+  .note-content hr {
+    border: none;
+    border-top: 2.5px solid var(--border);
+    margin: 1.6rem 2.5rem;
+    opacity: 1;
+  }
+
+  /* --- TOGGLES (DETAILS / SUMMARY) dentro de .note-content --- */
+
+  /* Alinha com o recuo dos parágrafos e adiciona visual de seção */
+  .note-content details {
+    margin-left: 2.5rem;
+    margin-right: 2.5rem;
+    margin-top: 1.4rem;
+    margin-bottom: 1.4rem;
+    border-left: 2px solid var(--border);
+    padding-left: 1rem;
+  }
+
+  /* Remove o triângulo padrão do navegador */
+  .note-content details>summary {
     list-style: none;
     cursor: pointer;
+    font-family: "Cascadia Mono", "SFMono-Regular", "Consolas", "Liberation Mono", monospace;
+    font-size: 1rem;
+    padding: 0.35rem 0;
+    opacity: 0.85;
+    user-select: none;
   }
 
   /* Firefox */
-  details>summary::-webkit-details-marker {
+  .note-content details>summary::-webkit-details-marker {
     display: none;
   }
 
-  /* Prefixo textual [+] quando fechado, [-] quando aberto */
-  details>summary::before {
+  /* Prefixo [+] fechado / [−] aberto */
+  .note-content details>summary::before {
     content: "[+] ";
-    font-size: 0.85rem;
-    opacity: 0.7;
+    opacity: 0.55;
   }
 
-  details[open]>summary::before {
-    content: "[-] ";
+  .note-content details[open]>summary::before {
+    content: "[−] ";
   }
 
-  /* Indenta o conteúdo expandido */
-  details>*:not(summary) {
-    margin-left: 1.5rem;
+  /* Hover sutil no summary */
+  .note-content details>summary:hover {
+    opacity: 1;
+  }
+
+  /* Pequeno espaço entre o summary e o corpo expandido */
+  .note-content details[open]>summary {
+    margin-bottom: 0.6rem;
   }
