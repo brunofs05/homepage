@@ -1,3 +1,10 @@
+// Detecção de Chrome (e navegadores Blink como Edge/Brave) para aplicar
+// workaround de renderização MathML — Chrome tem bug no MathML Core que
+// quebra cada sub-elemento em linha separada sem o fix de display: flex.
+if (/Chrome/.test(navigator.userAgent) && !/Firefox/.test(navigator.userAgent)) {
+  document.documentElement.classList.add("is-chrome");
+}
+
 // DOM := Document Object Model
 // é uma interface que representa página web em formato
 // de objetos, permitindo que linguagens como o js modifiquem

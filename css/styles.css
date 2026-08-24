@@ -482,6 +482,21 @@
     overflow-x: auto;
   }
 
+  /* Chrome MathML Core fix: aplicado via JS que detecta o browser e injeta */
+  /* a classe .is-chrome no <html>. Sem isso, o Chrome quebra cada sub-elemento */
+  /* do <math> em linha separada por não manter o contexto de formatação matemática. */
+  .is-chrome .note-content math {
+    display: inline-flex;
+    align-items: baseline;
+  }
+
+  .is-chrome .note-content math[display="block"] {
+    display: flex;
+    justify-content: center;
+    align-items: baseline;
+    flex-wrap: wrap;
+  }
+
   /* --- DIVIDER (HR) dentro de .note-content --- */
 
   .note-content hr {
