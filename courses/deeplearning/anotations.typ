@@ -1,8 +1,16 @@
-= Deep Learning
+#import "../_utils.typ": collapsible, divider
+
+Notes:
+These are personal class notes—not necessarily cohesive, not necessarily structured, and—most importantly—not necessarily accurate!
+
+Please check the sources, and feel free to point out any errors via email!
+
+#divider()
 
 Referencia: Bishop, D2L e MIT conforme a lista de aulas.
 
-== 01. Introduction
+
+#collapsible(summary: "01. Introduction", open: true)[
 
 Deep learning aprende representacoes em camadas:
 
@@ -33,7 +41,9 @@ y = torch.randint(0, 3, (32,))
 print(x.shape, y.shape)
 ```
 
-== 02. Basics on Neural Networks
+]
+
+#collapsible(summary: "02. Basics on Neural Networks")[
 
 Um neuronio combina entrada, pesos e vies:
 
@@ -68,7 +78,6 @@ cal(L) = -log p(y = c | x)
 $
 
 ```python
-
 import torch
 from torch import nn
 
@@ -88,7 +97,9 @@ loss.backward()
 print(loss.item())
 ```
 
-== 03. Convolutional Neural Networks + CNN Architectures
+]
+
+#collapsible(summary: "03. Convolutional Neural Networks + CNN Architectures")[
 
 CNNs exploram estrutura espacial. Em vez de conectar tudo com tudo, filtros pequenos percorrem a imagem.
 
@@ -113,7 +124,6 @@ $
 onde $I$ e entrada, $P$ padding, $K$ kernel e $S$ stride.
 
 ```python
-
 import torch
 from torch import nn
 
@@ -148,7 +158,6 @@ y = F(x) + x
 $
 
 ```python
-
 import torch
 from torch import nn
 
@@ -168,7 +177,9 @@ class ResidualBlock(nn.Module):
         return self.act(self.net(x) + x)
 ```
 
-== 04. Training
+]
+
+#collapsible(summary: "04. Training")[
 
 Treinar e repetir:
 
@@ -197,7 +208,6 @@ Pontos praticos:
 - Learning rate costuma importar mais que pequenos detalhes do modelo.
 
 ```python
-
 import torch
 from torch import nn
 
@@ -216,7 +226,9 @@ for step in range(100):
     opt.step()
 ```
 
-== 05. Optimization & Generalization
+]
+
+#collapsible(summary: "05. Optimization & Generalization")[
 
 Otimizacao pergunta: como reduzir a loss de treino?
 
@@ -255,7 +267,6 @@ tilde(h) = m dot.op h, quad m_i ~ "Bernoulli"(p)
 $
 
 ```python
-
 import torch
 from torch import nn
 
@@ -278,7 +289,9 @@ Checklist mental:
 - validacao melhorando: continue.
 - validacao parou de melhorar: early stopping ou reduzir LR.
 
-== 06. Semantic Segmentation
+]
+
+#collapsible(summary: "06. Semantic Segmentation")[
 
 Segmentacao semantica classifica cada pixel.
 
@@ -321,7 +334,6 @@ Arquiteturas comuns:
 - DeepLab: convolucoes dilatadas aumentam campo receptivo sem perder tanta resolucao.
 
 ```python
-
 import torch
 from torch import nn
 
@@ -354,6 +366,8 @@ logits = model(x)
 loss = nn.CrossEntropyLoss()(logits, y)
 print(logits.shape, loss.item())
 ```
+
+]
 
 == Resumo final
 
