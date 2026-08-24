@@ -12,7 +12,7 @@ merge_course() {
   [ -f "$typ" ]  || { echo "não achei $typ"; return 1; }
   [ -f "$bone" ] || { echo "não achei $bone"; return 1; }
 
-  typst compile "$typ" "$tmp" --features html
+  typst compile "$typ" "$tmp" --features html --root courses/
 
   python3 - "$tmp" "$bone" "$out" <<'PYEOF'
 import re, sys
