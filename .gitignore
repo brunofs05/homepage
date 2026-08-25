@@ -1,3 +1,6 @@
 anotations.txt
 *.pdf
-
+.python-version
+pyproject.toml
+src/
+uv.lock
