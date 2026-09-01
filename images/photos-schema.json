@@ -1,0 +1,78 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "description": "Contrato de dados para images/photos.json. Qualquer mudança nos campos do script extract_metadata.py deve ser refletida aqui antes de chegar à produção.",
+
+  "type": "array",
+  "minItems": 1,
+
+  "items": {
+    "type": "object",
+
+    "required": [
+      "filename",
+      "date",
+      "make",
+      "model",
+      "aperture",
+      "width",
+      "height",
+      "size_bytes"
+    ],
+
+    "additionalProperties": false,
+
+    "properties": {
+
+      "filename": {
+        "type": "string",
+        "minLength": 1,
+        "pattern": "\\.(jpg|jpeg)$",
+        "description": "Nome do arquivo. Chave usada pelo JS para montar o src da imagem. Nunca null — sem filename, o JS não sabe qual imagem carregar."
+      },
+
+      "date": {
+        "type": ["string", "null"],
+        "pattern": "^\\d{4}-\\d{2}-\\d{2}$",
+        "description": "Data da foto em ISO 8601 (YYYY-MM-DD). Null quando DateTimeOriginal está ausente no EXIF (ex: fotos recebidas por WhatsApp perdem metadados). O pattern só é validado quando o valor não é null."
+      },
+
+      "make": {
+        "type": ["string", "null"],
+        "minLength": 1,
+        "description": "Fabricante do aparelho (ex: 'Xiaomi', 'LG Electronics'). Null quando ausente no EXIF."
+      },
+
+      "model": {
+        "type": ["string", "null"],
+        "minLength": 1,
+        "description": "Modelo do aparelho (ex: 'Mi A3'). Null quando ausente no EXIF."
+      },
+
+      "aperture": {
+        "type": ["string", "null"],
+        "pattern": "^f/\\d+(\\.\\d+)?$",
+        "description": "Abertura no formato f/X.X (ex: 'f/1.8'). Null quando FNumber está ausente no EXIF. O pattern garante que o script não mudou o formato de saída sem aviso."
+      },
+
+      "width": {
+        "type": "integer",
+        "minimum": 1,
+        "description": "Largura em pixels da imagem (após correção de orientação EXIF). Nunca null — é extraído do PIL mesmo sem EXIF."
+      },
+
+      "height": {
+        "type": "integer",
+        "minimum": 1,
+        "description": "Altura em pixels da imagem. Nunca null — mesma razão que width."
+      },
+
+      "size_bytes": {
+        "type": "integer",
+        "minimum": 1,
+        "maximum": 52428800,
+        "description": "Tamanho do arquivo original em bytes. Máximo: 50 MB (52.428.800 bytes). Evita upload acidental de arquivo RAW ou vídeo na pasta de imagens."
+      }
+
+    }
+  }
+}
