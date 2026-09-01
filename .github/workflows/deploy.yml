@@ -10,6 +10,25 @@ jobs:
     steps:
       - uses: actions/checkout@v4
 
+      # uv gerencia o venv e as dependências do projeto (Pillow, jsonschema).
+      # setup-uv instala o uv no runner; uv sync instala o que está em uv.lock.
+      - name: Setup uv
+        uses: astral-sh/setup-uv@v4
+
+      - name: Install dependencies
+        run: uv sync
+
+      # Gera images/photos.json a partir do EXIF das fotos em images/.
+      # Como photos.json não está no git, o CI sempre parte do zero aqui.
+      - name: Generate photos metadata
+        run: uv run python scripts/extract_metadata.py
+
+      # Valida o JSON gerado contra o contrato (images/photos-schema.json).
+      # Retorna exit 1 se houver qualquer violação — os steps seguintes não rodam.
+      # É aqui que o deploy é bloqueado se os dados estiverem fora do contrato.
+      - name: Validate contract
+        run: uv run python scripts/validate_contract.py
+
       - name: Setup SSH
         run: |
           mkdir -p ~/.ssh
@@ -17,5 +36,9 @@ jobs:
           chmod 600 ~/.ssh/deploy_key
           echo "${{ secrets.SSH_KNOWN_HOSTS }}" > ~/.ssh/known_hosts
 
+      # rsync sincroniza o diretório de trabalho do runner — que inclui o
+      # photos.json recém-gerado — para o VPS. O --delete remove do servidor
+      # arquivos que não existem mais no repo (ex: fotos deletadas).
       - name: Deploy via rsync
         run: rsync -avz --delete --exclude='.git' --exclude='.github' --exclude='anotations.txt' -e "ssh -i ~/.ssh/deploy_key -o UserKnownHostsFile=~/.ssh/known_hosts" ./ ${{ secrets.VPS_USER }}@${{ secrets.VPS_HOST }}:/var/www/homepage/
+
