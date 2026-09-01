@@ -22,14 +22,15 @@ jobs:
 
       # Gera images/photos.json a partir do EXIF das fotos em images/.
       # Como photos.json não está no git, o CI sempre parte do zero aqui.
+      # Usa .venv/bin/python diretamente — uv run tentaria buildar o projeto.
       - name: Generate photos metadata
-        run: uv run python scripts/extract_metadata.py
+        run: .venv/bin/python scripts/extract_metadata.py
 
       # Valida o JSON gerado contra o contrato (images/photos-schema.json).
       # Retorna exit 1 se houver qualquer violação — os steps seguintes não rodam.
       # É aqui que o deploy é bloqueado se os dados estiverem fora do contrato.
       - name: Validate contract
-        run: uv run python scripts/validate_contract.py
+        run: .venv/bin/python scripts/validate_contract.py
 
       - name: Setup SSH
         run: |
