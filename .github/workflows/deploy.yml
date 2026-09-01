@@ -20,6 +20,10 @@ jobs:
         # sem tentar buildar o pacote homepage, que depende de src/ (não está no git)
         run: uv sync --no-install-project
 
+      # Gera thumbnails para qualquer foto que ainda não tenha
+      - name: Generate thumbnails
+        run: .venv/bin/python scripts/generate_thumbnails.py
+
       # Gera images/photos.json a partir do EXIF das fotos em images/.
       # Como photos.json não está no git, o CI sempre parte do zero aqui.
       # Usa .venv/bin/python diretamente — uv run tentaria buildar o projeto.
