@@ -16,7 +16,9 @@ jobs:
         uses: astral-sh/setup-uv@v4
 
       - name: Install dependencies
-        run: uv sync
+        # --no-install-project: instala só as dependências (Pillow, jsonschema)
+        # sem tentar buildar o pacote homepage, que depende de src/ (não está no git)
+        run: uv sync --no-install-project
 
       # Gera images/photos.json a partir do EXIF das fotos em images/.
       # Como photos.json não está no git, o CI sempre parte do zero aqui.
