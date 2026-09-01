@@ -1,0 +1,382 @@
+[
+  {
+    "filename": "20180101_182349.jpg",
+    "date": "2018-01-01",
+    "make": "LG Electronics",
+    "model": "LG-K430TV",
+    "aperture": "f/2.2",
+    "width": 4160,
+    "height": 2336,
+    "size_bytes": 653671
+  },
+  {
+    "filename": "20180718_081108.jpg",
+    "date": "2018-07-18",
+    "make": "LG Electronics",
+    "model": "LG-K430TV",
+    "aperture": "f/2.2",
+    "width": 4160,
+    "height": 2336,
+    "size_bytes": 293907
+  },
+  {
+    "filename": "20180908_155131.jpg",
+    "date": "2018-09-08",
+    "make": "LG Electronics",
+    "model": "LG-K430TV",
+    "aperture": "f/2.2",
+    "width": 4160,
+    "height": 2336,
+    "size_bytes": 723268
+  },
+  {
+    "filename": "20190524_095840.jpg",
+    "date": "2019-05-24",
+    "make": "LG Electronics",
+    "model": "LG-K430TV",
+    "aperture": "f/2.2",
+    "width": 4160,
+    "height": 2336,
+    "size_bytes": 931299
+  },
+  {
+    "filename": "IMG_20200119_195827.jpg",
+    "date": "2020-01-19",
+    "make": "Xiaomi",
+    "model": "Mi A3",
+    "aperture": "f/1.8",
+    "width": 4000,
+    "height": 3000,
+    "size_bytes": 431014
+  },
+  {
+    "filename": "IMG_20200201_165131.jpg",
+    "date": "2020-02-01",
+    "make": "Xiaomi",
+    "model": "Mi A3",
+    "aperture": "f/1.8",
+    "width": 4000,
+    "height": 3000,
+    "size_bytes": 2711990
+  },
+  {
+    "filename": "IMG_20200204_193309.jpg",
+    "date": "2020-02-04",
+    "make": "Xiaomi",
+    "model": "Mi A3",
+    "aperture": "f/2.2",
+    "width": 3264,
+    "height": 2448,
+    "size_bytes": 496603
+  },
+  {
+    "filename": "IMG_20200204_193324.jpg",
+    "date": "2020-02-04",
+    "make": "Xiaomi",
+    "model": "Mi A3",
+    "aperture": "f/2.2",
+    "width": 3264,
+    "height": 2448,
+    "size_bytes": 1431439
+  },
+  {
+    "filename": "IMG_20200308_103604.jpg",
+    "date": "2020-03-08",
+    "make": "Xiaomi",
+    "model": "Mi A3",
+    "aperture": "f/1.8",
+    "width": 4000,
+    "height": 3000,
+    "size_bytes": 1996681
+  },
+  {
+    "filename": "IMG_20201231_195932.jpg",
+    "date": "2020-12-31",
+    "make": "Xiaomi",
+    "model": "Mi A3",
+    "aperture": "f/1.8",
+    "width": 4000,
+    "height": 3000,
+    "size_bytes": 257326
+  },
+  {
+    "filename": "IMG_20210123_144150.jpg",
+    "date": "2021-01-23",
+    "make": "Xiaomi",
+    "model": "Mi A3",
+    "aperture": "f/2.2",
+    "width": 3264,
+    "height": 2448,
+    "size_bytes": 896091
+  },
+  {
+    "filename": "IMG_20210124_192911.jpg",
+    "date": "2021-01-24",
+    "make": "Xiaomi",
+    "model": "Mi A3",
+    "aperture": "f/1.8",
+    "width": 4000,
+    "height": 3000,
+    "size_bytes": 371546
+  },
+  {
+    "filename": "IMG_20211025_004622.jpg",
+    "date": "2021-10-25",
+    "make": "Xiaomi",
+    "model": "MA-A3",
+    "aperture": "f/1.8",
+    "width": 4000,
+    "height": 3000,
+    "size_bytes": 1878135
+  },
+  {
+    "filename": "IMG_20211025_011528.jpg",
+    "date": "2021-10-25",
+    "make": "Xiaomi",
+    "model": "MA-A3",
+    "aperture": "f/1.8",
+    "width": 4000,
+    "height": 3000,
+    "size_bytes": 1702102
+  },
+  {
+    "filename": "IMG_20211031_170552.jpg",
+    "date": "2021-10-31",
+    "make": "Xiaomi",
+    "model": "Mi A3",
+    "aperture": "f/1.8",
+    "width": 4000,
+    "height": 3000,
+    "size_bytes": 4077797
+  },
+  {
+    "filename": "IMG_20211129_130937.jpg",
+    "date": "2021-11-29",
+    "make": "Xiaomi",
+    "model": "MA-A3",
+    "aperture": "f/2.2",
+    "width": 3264,
+    "height": 2448,
+    "size_bytes": 2372756
+  },
+  {
+    "filename": "IMG_20220702_164013.jpg",
+    "date": "2022-07-02",
+    "make": "Xiaomi",
+    "model": "Mi A3",
+    "aperture": "f/1.8",
+    "width": 4000,
+    "height": 3000,
+    "size_bytes": 3423836
+  },
+  {
+    "filename": "IMG_20221009_145108.jpg",
+    "date": "2022-10-09",
+    "make": "Xiaomi",
+    "model": "Mi A3",
+    "aperture": "f/2.2",
+    "width": 3264,
+    "height": 2448,
+    "size_bytes": 2248764
+  },
+  {
+    "filename": "IMG_20221216_191107.jpg",
+    "date": "2022-12-16",
+    "make": "Xiaomi",
+    "model": "Mi A3",
+    "aperture": "f/1.8",
+    "width": 4000,
+    "height": 3000,
+    "size_bytes": 3985725
+  },
+  {
+    "filename": "IMG_20221225_160114.jpg",
+    "date": "2022-12-25",
+    "make": "Xiaomi",
+    "model": "Mi A3",
+    "aperture": "f/1.8",
+    "width": 4000,
+    "height": 3000,
+    "size_bytes": 2979130
+  },
+  {
+    "filename": "IMG_20230125_174731.jpg",
+    "date": "2023-01-25",
+    "make": "Xiaomi",
+    "model": "Mi A3",
+    "aperture": "f/1.8",
+    "width": 4000,
+    "height": 3000,
+    "size_bytes": 6274766
+  },
+  {
+    "filename": "IMG_20230307_084453.jpg",
+    "date": "2023-03-07",
+    "make": "Xiaomi",
+    "model": "Mi A3",
+    "aperture": "f/1.8",
+    "width": 4000,
+    "height": 3000,
+    "size_bytes": 2698558
+  },
+  {
+    "filename": "IMG_20230606_203119.jpg",
+    "date": "2023-06-06",
+    "make": "Xiaomi",
+    "model": "Mi A3",
+    "aperture": "f/1.8",
+    "width": 4000,
+    "height": 3000,
+    "size_bytes": 2618419
+  },
+  {
+    "filename": "IMG_20230624_105253.jpg",
+    "date": "2023-06-24",
+    "make": "Xiaomi",
+    "model": "Mi A3",
+    "aperture": "f/1.8",
+    "width": 4000,
+    "height": 3000,
+    "size_bytes": 6729304
+  },
+  {
+    "filename": "IMG_20230708_131501.jpg",
+    "date": "2023-07-08",
+    "make": "Xiaomi",
+    "model": "Mi A3",
+    "aperture": "f/1.8",
+    "width": 4000,
+    "height": 3000,
+    "size_bytes": 2702583
+  },
+  {
+    "filename": "IMG_20230804_135955.jpg",
+    "date": "2023-08-04",
+    "make": "Xiaomi",
+    "model": "Mi A3",
+    "aperture": "f/1.8",
+    "width": 4000,
+    "height": 3000,
+    "size_bytes": 3202834
+  },
+  {
+    "filename": "IMG_20230903_180622.jpg",
+    "date": "2023-09-03",
+    "make": "Xiaomi",
+    "model": "Mi A3",
+    "aperture": "f/1.8",
+    "width": 4000,
+    "height": 3000,
+    "size_bytes": 3163910
+  },
+  {
+    "filename": "IMG_20231229_193810.jpg",
+    "date": "2023-12-29",
+    "make": "Xiaomi",
+    "model": "Mi A3",
+    "aperture": "f/1.8",
+    "width": 4000,
+    "height": 3000,
+    "size_bytes": 3187940
+  },
+  {
+    "filename": "IMG_20240103_184554.jpg",
+    "date": "2024-01-03",
+    "make": "Xiaomi",
+    "model": "Mi A3",
+    "aperture": "f/1.8",
+    "width": 4000,
+    "height": 3000,
+    "size_bytes": 6405586
+  },
+  {
+    "filename": "IMG_20240126_195552.jpg",
+    "date": "2024-01-26",
+    "make": "Xiaomi",
+    "model": "Mi A3",
+    "aperture": "f/1.8",
+    "width": 4000,
+    "height": 3000,
+    "size_bytes": 2964542
+  },
+  {
+    "filename": "IMG_20240129_192548.jpg",
+    "date": "2024-01-29",
+    "make": "Xiaomi",
+    "model": "Mi A3",
+    "aperture": "f/1.8",
+    "width": 4000,
+    "height": 3000,
+    "size_bytes": 3346945
+  },
+  {
+    "filename": "IMG-20180107-WA0014.jpg",
+    "date": null,
+    "make": null,
+    "model": null,
+    "aperture": null,
+    "width": 1280,
+    "height": 719,
+    "size_bytes": 90414
+  },
+  {
+    "filename": "IMG-20180107-WA0016.jpg",
+    "date": null,
+    "make": null,
+    "model": null,
+    "aperture": null,
+    "width": 960,
+    "height": 1280,
+    "size_bytes": 80027
+  },
+  {
+    "filename": "IMG-20190203-WA0001.jpg",
+    "date": null,
+    "make": null,
+    "model": null,
+    "aperture": null,
+    "width": 1040,
+    "height": 780,
+    "size_bytes": 94564
+  },
+  {
+    "filename": "IMG-20190211-WA0053.jpg",
+    "date": null,
+    "make": null,
+    "model": null,
+    "aperture": null,
+    "width": 1032,
+    "height": 774,
+    "size_bytes": 21521
+  },
+  {
+    "filename": "IMG-20190227-WA0007.jpg",
+    "date": null,
+    "make": null,
+    "model": null,
+    "aperture": null,
+    "width": 719,
+    "height": 1280,
+    "size_bytes": 40778
+  },
+  {
+    "filename": "IMG-20200315-WA0021.jpeg",
+    "date": null,
+    "make": null,
+    "model": null,
+    "aperture": null,
+    "width": 2248,
+    "height": 4000,
+    "size_bytes": 364771
+  },
+  {
+    "filename": "WhatsApp Image 2020-11-16 at 19.24.47.jpeg",
+    "date": null,
+    "make": null,
+    "model": null,
+    "aperture": null,
+    "width": 1280,
+    "height": 813,
+    "size_bytes": 95228
+  }
+]
