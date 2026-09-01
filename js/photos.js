@@ -1,80 +1,148 @@
 // Ouve o carregamento do DOM para ter certeza que o HTML já existe antes do JS rodar
 document.addEventListener('DOMContentLoaded', () => {
-    
-    // 1. Captura os elementos principais que vamos manipular
+
+    // ── Elementos do modal (inalterados) ─────────────────────────────────────
+
     let scrollPosition = 0;
-    const modal = document.getElementById('photo-modal');
-    const btnClose = document.getElementById('close-modal');
-    const modalImage = document.getElementById('modal-image');
-    
-    // 2. Captura os elementos de texto onde colocaremos os metadados
-    const metaDate = document.getElementById('meta-date');
-    const metaSensor = document.getElementById('meta-sensor');
+    const modal        = document.getElementById('photo-modal');
+    const btnClose     = document.getElementById('close-modal');
+    const modalImage   = document.getElementById('modal-image');
+    const metaDate     = document.getElementById('meta-date');
+    const metaSensor   = document.getElementById('meta-sensor');
     const metaAperture = document.getElementById('meta-aperture');
-    const metaSize = document.getElementById('meta-size');
+    const metaSize     = document.getElementById('meta-size');
 
-    // 3. Captura todos os botões (as miniaturas das fotos)
-    const photoButtons = document.querySelectorAll('.photo-btn');
+    // O grid agora é populado via JS — o HTML entrega só o <ul> vazio
+    const photoGrid = document.querySelector('.photo-grid');
 
-    // 4. Para cada botão de foto, adicionamos a ação de "clique"
-    photoButtons.forEach(btn => {
+
+    // ── Formatação de dados brutos do JSON ────────────────────────────────────
+
+    // Converte "YYYY-MM-DD" (ISO 8601) para "DD Mês, YYYY" em pt-BR
+    function formatDate(isoDate) {
+        if (!isoDate) return '—';
+        const months = ['Jan', 'Fev', 'Mar', 'Abr', 'Mai', 'Jun',
+                        'Jul', 'Ago', 'Set', 'Out', 'Nov', 'Dez'];
+        const [year, month, day] = isoDate.split('-');
+        return `${day} ${months[parseInt(month, 10) - 1]}, ${year}`;
+    }
+
+    // Converte size_bytes (inteiro) para "X.X MB"
+    function formatSize(bytes) {
+        if (!bytes) return '—';
+        return (bytes / 1048576).toFixed(1) + ' MB';
+    }
+
+    // Combina make + model; evita repetição quando o model já inclui o make
+    // ex: make="Xiaomi", model="Xiaomi Mi A3" → "Xiaomi Mi A3" (não "Xiaomi Xiaomi Mi A3")
+    function formatSensor(make, model) {
+        if (!make && !model) return '—';
+        if (!make)  return model;
+        if (!model) return make;
+        if (model.startsWith(make)) return model;
+        return `${make} ${model}`;
+    }
+
+    // Texto alternativo da imagem para acessibilidade
+    function photoAlt(photo) {
+        if (photo.date) return `Foto de ${photo.date.slice(0, 4)}`;
+        return 'Foto sem data';
+    }
+
+
+    // ── Construção do elemento de foto ────────────────────────────────────────
+
+    // Cria um <li> completo para cada registro do photos.json.
+    // Os dados vêm do objeto photo diretamente — sem data-* attributes no HTML.
+    // A referência ao btn é capturada pelo closure do addEventListener abaixo,
+    // o que permite alterar o visual do botão específico que foi clicado.
+    function createPhotoItem(photo) {
+        const fullSrc = `images/${photo.filename}`;
+        const miniSrc = `images/mini/${photo.filename}`;
+
+        const li          = document.createElement('li');
+        const btn         = document.createElement('button');
+        const figure      = document.createElement('figure');
+        const img         = document.createElement('img');
+        const figcaption  = document.createElement('figcaption');
+
+        btn.className        = 'photo-btn';
+        img.src              = miniSrc;
+        img.alt              = photoAlt(photo);
+        img.loading          = 'lazy';
+        figcaption.textContent = formatDate(photo.date);
+
+        figure.append(img, figcaption);
+        btn.appendChild(figure);
+        li.appendChild(btn);
+
         btn.addEventListener('click', () => {
-            
-            // Lemos os atributos data-* que nós escrevemos no HTML
-            const fullSrc = btn.getAttribute('data-full-src');
-            const date = btn.getAttribute('data-date');
-            const sensor = btn.getAttribute('data-sensor');
-            const aperture = btn.getAttribute('data-aperture');
-            const size = btn.getAttribute('data-size');
 
-            // Feedback visual: O botão fica meio transparente e o cursor muda 
-            // indicando pro usuário que a foto está baixando
+            // Feedback visual: botão fica opaco e cursor muda enquanto baixa a imagem
             btn.style.opacity = '0.5';
             document.body.style.cursor = 'wait';
 
-            // Truque de polimento: criamos uma imagem "fantasma" na memória
-            // Isso força o navegador a fazer o download da imagem em background
+            // Imagem "fantasma" força o browser a baixar a imagem real em background
+            // antes de abrir o modal — elimina o tranco de redimensionamento
             const preloadImg = new Image();
-            
-            // Dispara assim que a imagem terminar de baixar
+
             preloadImg.onload = () => {
-                // Restauramos o visual do botão e do cursor
                 btn.style.opacity = '1';
                 document.body.style.cursor = 'default';
 
-                // Agora injetamos a imagem carregada no Modal
-                modalImage.src = fullSrc;
-                metaDate.textContent = date;
-                metaSensor.textContent = sensor;
-                metaAperture.textContent = aperture;
-                metaSize.textContent = size;
+                modalImage.src             = fullSrc;
+                metaDate.textContent       = formatDate(photo.date);
+                metaSensor.textContent     = formatSensor(photo.make, photo.model);
+                metaAperture.textContent   = photo.aperture ?? '—';
+                metaSize.textContent       = formatSize(photo.size_bytes);
 
-                // Ao abrir o modal agora, a imagem já está no cache do navegador.
-                // Isso elimina o tranco/travada de redimensionamento abrindo o modal polido.
                 scrollPosition = window.scrollY;
                 modal.showModal();
             };
 
-            // Boa prática: e se a foto não existir ou a internet cair?
             preloadImg.onerror = () => {
                 btn.style.opacity = '1';
                 document.body.style.cursor = 'default';
-                console.error("Error loading the original image.");
+                console.error('Erro ao carregar imagem:', fullSrc);
             };
 
-            // Mandamos o navegador começar a baixar a imagem real
             preloadImg.src = fullSrc;
         });
-    });
+
+        return li;
+    }
+
+
+    // ── Carregamento do JSON e renderização do grid ───────────────────────────
+
+    // fetch é a forma nativa do browser de buscar recursos — sem biblioteca.
+    // DocumentFragment acumula todos os <li> antes de inserir no DOM,
+    // evitando um reflow a cada elemento adicionado.
+    fetch('images/photos.json')
+        .then(response => {
+            if (!response.ok) throw new Error(`HTTP ${response.status}`);
+            return response.json();
+        })
+        .then(photos => {
+            const fragment = document.createDocumentFragment();
+            photos.forEach(photo => fragment.appendChild(createPhotoItem(photo)));
+            photoGrid.appendChild(fragment);
+        })
+        .catch(err => {
+            console.error('Erro ao carregar photos.json:', err);
+            photoGrid.innerHTML = '<li style="padding:1em">Erro ao carregar as fotos.</li>';
+        });
+
+
+    // ── Modal: fechar ─────────────────────────────────────────────────────────
 
     btnClose.addEventListener('click', () => {
         modal.close();
         window.scrollTo(0, scrollPosition);
     });
 
-    // fechar o modal clicando fora dele
-    modal.addEventListener('click', (event) => {
-        // Se o elemento clicado for estritamente o próprio dialog (que funciona como a área do backdrop)
+    // Fechar clicando fora do conteúdo do modal (no backdrop)
+    modal.addEventListener('click', event => {
         if (event.target === modal) {
             modal.close();
             window.scrollTo(0, scrollPosition);
