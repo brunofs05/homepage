@@ -1,3 +1,4 @@
+// title: Software Engineering
 #import "../_utils.typ": collapsible, divider
 
 Notes:

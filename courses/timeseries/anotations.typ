@@ -1,3 +1,4 @@
+// title: Time Series
 #import "../_utils.typ": collapsible, divider
 
 Notes:
@@ -6,7 +7,7 @@ These are personal class notes—not necessarily cohesive, not necessarily struc
 Please check the sources, and feel free to point out any errors via email!
 
 
-#collapsible("teste", summary: "Primeiras 4 Aulas") [ 
+#collapsible(summary: "Primeiras 4 Aulas")[
 
 #divider()
 
@@ -18,8 +19,8 @@ Previsão x Descrição x Diagnóstico
 
 #divider()
 
-Normal: $Cov<=>Ind$
-No geral: $Ind=>Cov$
+Normal: $"Cov" <=> "Ind"$
+No geral: $"Ind" => "Cov"$
 
 AR(1)
 
@@ -30,6 +31,6 @@ Tendencia Linear
 Estacionariade Fraca
 ]
 
-#collapsible(summary: "Segunda Semana") [
+#collapsible(summary: "Segunda Semana")[
   Box-Pierce e Ljung-Box
 ]

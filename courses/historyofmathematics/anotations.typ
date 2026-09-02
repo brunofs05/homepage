@@ -1,3 +1,4 @@
+// title: History of Mathematics
 #import "../_utils.typ": collapsible, divider
 
 Notes:

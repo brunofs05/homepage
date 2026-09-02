@@ -1,3 +1,4 @@
+// title: Deep Learning
 #import "../_utils.typ": collapsible, divider
 
 Notes:
