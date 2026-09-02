@@ -20,6 +20,20 @@ jobs:
         # sem tentar buildar o pacote homepage, que depende de src/ (não está no git)
         run: uv sync --no-install-project
 
+      # Instala o typst CLI a partir do release oficial.
+      # A versão é fixada para builds determinísticos — atualize quando necessário.
+      - name: Install typst
+        run: |
+          TYPST_VERSION="0.15.1"
+          curl -fsSL "https://github.com/typst/typst/releases/download/v${TYPST_VERSION}/typst-x86_64-unknown-linux-musl.tar.xz" \
+            | tar -xJ --strip-components=1 -C /usr/local/bin typst-x86_64-unknown-linux-musl/typst
+
+      # Compila cada anotations.typ e injeta o resultado no bone.html único,
+      # gerando o index.html de cada curso. Os index.html não estão no git —
+      # eles são produzidos aqui e transferidos via rsync.
+      - name: Compile courses
+        run: bash scripts/merge.sh
+
       # Gera thumbnails para qualquer foto que ainda não tenha
       - name: Generate thumbnails
         run: .venv/bin/python scripts/generate_thumbnails.py
@@ -43,9 +57,8 @@ jobs:
           chmod 600 ~/.ssh/deploy_key
           echo "${{ secrets.SSH_KNOWN_HOSTS }}" > ~/.ssh/known_hosts
 
-      # rsync sincroniza o diretório de trabalho do runner — que inclui o
-      # photos.json recém-gerado — para o VPS. O --delete remove do servidor
-      # arquivos que não existem mais no repo (ex: fotos deletadas).
+      # rsync sincroniza o diretório de trabalho do runner — que inclui os
+      # index.html recém-gerados e o photos.json — para o VPS. O --delete remove
+      # do servidor arquivos que não existem mais no repo (ex: fotos deletadas).
       - name: Deploy via rsync
         run: rsync -avz --delete --exclude='.git' --exclude='.github' --exclude='anotations.txt' -e "ssh -i ~/.ssh/deploy_key -o UserKnownHostsFile=~/.ssh/known_hosts" ./ ${{ secrets.VPS_USER }}@${{ secrets.VPS_HOST }}:/var/www/homepage/
-

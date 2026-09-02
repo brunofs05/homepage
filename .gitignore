@@ -6,3 +6,11 @@ src/
 # Gerado pelo CI via scripts/extract_metadata.py — não versionar.
 # O CI produz este arquivo a cada run; localmente, rode o script para gerá-lo.
 images/photos.json
+
+# Gerados pelo merge.sh a partir dos .typ — não versionar.
+# Localmente: bash scripts/merge.sh [curso]
+# No CI: step "Compile courses" os produz antes do rsync.
+courses/*/index.html
+courses/*/.typst-out.html
+
+.vscode/
