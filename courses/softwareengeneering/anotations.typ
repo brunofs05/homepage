@@ -2,13 +2,11 @@
 #import "../_utils.typ": collapsible, divider
 
 Notes:
-These are personal class notes—not necessarily cohesive, not necessarily structured, and—most importantly—not necessarily accurate!
-
-Please check the sources, and feel free to point out any errors via email!
+These are personal class notes, not necessarily cohesive, not necessarily structured, and — most importantly — not necessarily accurate! Please check the sources, and feel free to point out any errors via email!
 
 #divider()
 
-#collapsible(summary: "Metodologias Ágeis", open: true)[
+#collapsible(summary: "Metodologias Ágeis", open: false)[
 
   Metodologia Ágil é uma abordagem de desenvolvimento que prioriza entregas rápidas e incrementais, adaptação a mudanças e colaboração contínua entre equipe e cliente. O foco está em responder às mudanças em vez de seguir um plano rígido — ao contrário das metodologias tradicionais (como o modelo cascata), onde cada fase deve ser concluída antes da próxima começar.
 
@@ -175,5 +173,49 @@ Please check the sources, and feel free to point out any errors via email!
   ===== Definição de "Pronto" _(Definition of Done)_
 
   Entendimento compartilhado e explícito do que significa o trabalho estar completo. Garante transparência e alinha expectativas de todo o time. Todos os membros do Time Scrum devem concordar com ela. Se a organização não tem uma definição padrão, o Time de Desenvolvimento deve criar uma adequada ao produto. Com o amadurecimento do time, a definição de "Pronto" tende a se tornar mais rigorosa.
+
+]
+
+#collapsible(summary: "SOLID e Padrões de Projeto", open: true)[
+
+BAQ
+
+? relembrar para que serve o __init__, self
+
+? abstractmethod das classes
+
+? o que é a classe ABC, o que significa herda-la
+
+? subclasse
+
+? o que é a classe __str__
+
+Python é fracamente tipada, nada impede ninguém de passar qualquer coisa para os parâmetros das classes e funções, ao invés de ficarmos verificando todos métodos e parâmetros no código, o que deixaria o programa lento e ruim, nós devemos declarar o comportamento esperado e confiar que quem chamou, rodou. Tudo que é tratado interno tende a ser assim, com verificações mais comuns com coisas que vem de fora do sistema.
+
+SOLID
+
+SRP := Princípio de Responsabilidade única : cada componente deve apresentar uma única responsabilidade, um único motivo para ser alterado. É o S do SOLID
+
+code smell := sintoma que o desing do código está ruim, funciona mas tem um - cheiro - de um problema estrutural
+
+God class := classe ou método que faz muitas coisas, centralizando responsabilidades que deveriam ser separadas
+
+"toda vez que uma mudança no código não obriga o main a mudar junto, o desing melhorou"
+
+Padrões de projeto são implementações testadas e bem documentadas de problemas recorrentes de modelagem, o livro referência de 1994 GoF (Gang of Four) ou talvez se chame Desing Patterns, categoriza os padroes em: criacionais (como criar objetos: factory method, abstract factory,  builder, prototype, singleton), estruturais,  comportamentais.
+
+Sinfle Factory := classe cujo único trabalho é decidir qual objeto concreto criar, tirando essa decisão de quem consome o objeto
+
+O Simple Factory é didático, usado para entender o Factory Method que é reconhecidamente um padrão de projeto
+
+Factory Method := cada subclasse decide, via método abstrato sobrescrito, qual objeto concreto criar, substitui o if por polimorfismo
+
+No Factory Method, usamos o princípio do Open/Closed Principle, o O do SOLID, uma classe deve estar fechada para modificaçãoe aberta para extensão
+
+OCP := Open/Closed Principle : uma classe deve estar fechada para modificação e aberta para extensão
+
+Outro problema comum é esconder a complexidade de montar um/vários do mesmo/diferente objeto, um exemplo didático seria: construir uma requisição http, que precisaria de uma quantidade razoável de parâmetros: url, header, token, body... Para resolver isso, cria-se uma classe 
+
+Pergunta Gigatônica derivada: por que criar uma classe para passar parâmetros se, parece mais simples passar parâmetros para a classe principal com menos código? A resposta:  Builder clássico nasceu pra resolver o problema do construtor telescópico, em que pular um parâmetro opcional te obrigava a passar null pra todos os anteriores na ordem certa. Não conseguimos enxergar esse problema pois o Python já resolve isso de fábrica com kwargs e parâmetros nomeados (colocar parametro = valor_padrao).
 
 ]
