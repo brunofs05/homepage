@@ -1,20 +1,27 @@
-# Deep Learning - anotacoes
+// title: Deep Learning
+#import "_utils.typ": collapsible, divider
+
+Notes:
+These are personal class notes, not necessarily cohesive, not necessarily structured, and — most importantly — not necessarily accurate! Please check the sources, and feel free to point out any errors via email!
+
+#divider()
 
 Referencia: Bishop, D2L e MIT conforme a lista de aulas.
 
-## 01. Introduction
+
+#collapsible(summary: "01. Introduction", open: true)[
 
 Deep learning aprende representacoes em camadas:
 
-$$
-x \xrightarrow{f_1} h_1 \xrightarrow{f_2} h_2 \xrightarrow{\cdots} \hat{y}
-$$
+$
+x ->^f_1 h_1 ->^f_2 h_2 -> dots.c -> hat(y)
+$
 
-A ideia central e ajustar parametros $\theta$ para minimizar uma perda:
+A ideia central e ajustar parametros $theta$ para minimizar uma perda:
 
-$$
-\theta^* = \arg\min_\theta \frac{1}{N}\sum_{i=1}^N \mathcal{L}(f_\theta(x_i), y_i)
-$$
+$
+theta^* = arg min_theta 1 / N sum_(i=1)^N cal(L)(f_theta(x_i), y_i)
+$
 
 Notas rapidas:
 
@@ -33,40 +40,41 @@ y = torch.randint(0, 3, (32,))
 print(x.shape, y.shape)
 ```
 
-## 02. Basics on Neural Networks
+]
+
+#collapsible(summary: "02. Basics on Neural Networks")[
 
 Um neuronio combina entrada, pesos e vies:
 
-$$
-z = w^\top x + b
-$$
+$
+z = w^T x + b
+$
 
 Depois aplica uma ativacao nao linear:
 
-$$
-h = \phi(z)
-$$
+$
+h = phi(z)
+$
 
 Sem nao linearidade, varias camadas viram apenas uma transformacao linear.
 
 MLP:
 
-$$
-h_1 = \phi(W_1x + b_1), \qquad
-\hat{y} = W_2h_1 + b_2
-$$
+$
+h_1 = phi(W_1 x + b_1), quad hat(y) = W_2 h_1 + b_2
+$
 
 Para classificacao multiclasse, usamos softmax:
 
-$$
-p(y=k \mid x) = \frac{e^{z_k}}{\sum_j e^{z_j}}
-$$
+$
+p(y = k | x) = e^(z_k) / sum_j e^(z_j)
+$
 
 Cross-entropy:
 
-$$
-\mathcal{L} = -\log p(y=c \mid x)
-$$
+$
+cal(L) = -log p(y = c | x)
+$
 
 ```python
 import torch
@@ -88,15 +96,17 @@ loss.backward()
 print(loss.item())
 ```
 
-## 03. Convolutional Neural Networks + CNN Architectures
+]
+
+#collapsible(summary: "03. Convolutional Neural Networks + CNN Architectures")[
 
 CNNs exploram estrutura espacial. Em vez de conectar tudo com tudo, filtros pequenos percorrem a imagem.
 
 Convolucao 2D simplificada:
 
-$$
-Y_{i,j,k} = b_k + \sum_c \sum_u \sum_v W_{u,v,c,k} X_{i+u,j+v,c}
-$$
+$
+Y_(i,j,k) = b_k + sum_c sum_u sum_v W_(u,v,c,k) X_(i+u,j+v,c)
+$
 
 Intuicao:
 
@@ -106,9 +116,9 @@ Intuicao:
 
 Tamanho da saida em uma dimensao:
 
-$$
-O = \left\lfloor \frac{I + 2P - K}{S} \right\rfloor + 1
-$$
+$
+O = floor((I + 2 P - K) / S) + 1
+$
 
 onde $I$ e entrada, $P$ padding, $K$ kernel e $S$ stride.
 
@@ -136,15 +146,15 @@ Arquiteturas importantes:
 
 - LeNet: CNN classica pequena para digitos.
 - AlexNet: ReLU, GPU, dropout; marco em ImageNet.
-- VGG: muitos filtros $3 \times 3$, arquitetura simples e profunda.
+- VGG: muitos filtros $3 times 3$, arquitetura simples e profunda.
 - Inception/GoogLeNet: varios tamanhos de filtro em paralelo.
 - ResNet: conexoes residuais facilitam redes muito profundas.
 
 Bloco residual:
 
-$$
+$
 y = F(x) + x
-$$
+$
 
 ```python
 import torch
@@ -166,26 +176,28 @@ class ResidualBlock(nn.Module):
         return self.act(self.net(x) + x)
 ```
 
-## 04. Training
+]
+
+#collapsible(summary: "04. Training")[
 
 Treinar e repetir:
 
-1. forward: calcular $\hat{y} = f_\theta(x)$
-2. loss: medir $\mathcal{L}(\hat{y}, y)$
-3. backward: calcular gradientes $\nabla_\theta \mathcal{L}$
-4. update: alterar pesos
++ forward: calcular $hat(y) = f_theta(x)$
++ loss: medir $cal(L)(hat(y), y)$
++ backward: calcular gradientes $nabla_theta cal(L)$
++ update: alterar pesos
 
 Atualizacao basica por gradiente descendente:
 
-$$
-\theta_{t+1} = \theta_t - \eta \nabla_\theta \mathcal{L}(\theta_t)
-$$
+$
+theta_(t+1) = theta_t - eta nabla_theta cal(L)(theta_t)
+$
 
 Mini-batch SGD aproxima o gradiente usando poucos exemplos:
 
-$$
-g_t = \frac{1}{B}\sum_{i \in \mathcal{B}} \nabla_\theta \mathcal{L}_i(\theta_t)
-$$
+$
+g_t = 1 / B sum_(i in cal(B)) nabla_theta cal(L)_i(theta_t)
+$
 
 Pontos praticos:
 
@@ -213,7 +225,9 @@ for step in range(100):
     opt.step()
 ```
 
-## 05. Optimization & Generalization
+]
+
+#collapsible(summary: "05. Optimization & Generalization")[
 
 Otimizacao pergunta: como reduzir a loss de treino?
 
@@ -221,35 +235,35 @@ Generalizacao pergunta: o modelo aprendeu padroes ou decorou?
 
 Momentum suaviza atualizacoes:
 
-$$
-v_{t+1} = \beta v_t + \nabla_\theta \mathcal{L}(\theta_t)
-$$
+$
+v_(t+1) = beta v_t + nabla_theta cal(L)(theta_t)
+$
 
-$$
-\theta_{t+1} = \theta_t - \eta v_{t+1}
-$$
+$
+theta_(t+1) = theta_t - eta v_(t+1)
+$
 
 Adam combina media de gradientes e de gradientes ao quadrado:
 
-$$
-m_t = \beta_1m_{t-1} + (1-\beta_1)g_t
-$$
+$
+m_t = beta_1 m_(t-1) + (1 - beta_1) g_t
+$
 
-$$
-v_t = \beta_2v_{t-1} + (1-\beta_2)g_t^2
-$$
+$
+v_t = beta_2 v_(t-1) + (1 - beta_2) g_t^2
+$
 
 Regularizacao L2:
 
-$$
-\mathcal{L}_{total} = \mathcal{L}_{data} + \lambda \lVert \theta \rVert_2^2
-$$
+$
+cal(L)_"total" = cal(L)_"data" + lambda norm(theta)_2^2
+$
 
 Dropout:
 
-$$
-\tilde{h} = m \odot h, \qquad m_i \sim \mathrm{Bernoulli}(p)
-$$
+$
+tilde(h) = m dot.op h, quad m_i ~ "Bernoulli"(p)
+$
 
 ```python
 import torch
@@ -274,41 +288,43 @@ Checklist mental:
 - validacao melhorando: continue.
 - validacao parou de melhorar: early stopping ou reduzir LR.
 
-## 06. Semantic Segmentation
+]
+
+#collapsible(summary: "06. Semantic Segmentation")[
 
 Segmentacao semantica classifica cada pixel.
 
 Entrada:
 
-$$
-X \in \mathbb{R}^{C \times H \times W}
-$$
+$
+X in bb(R)^(C times H times W)
+$
 
 Saida:
 
-$$
-\hat{Y} \in \mathbb{R}^{K \times H \times W}
-$$
+$
+hat(Y) in bb(R)^(K times H times W)
+$
 
 onde $K$ e o numero de classes. Cada pixel recebe uma distribuicao sobre classes.
 
 Loss por pixel:
 
-$$
-\mathcal{L} = - \frac{1}{HW}\sum_{i,j}\log p(y_{i,j} \mid x)
-$$
+$
+cal(L) = - 1 / (H W) sum_(i,j) log p(y_(i,j) | x)
+$
 
 IoU para uma classe:
 
-$$
-\mathrm{IoU} = \frac{TP}{TP + FP + FN}
-$$
+$
+"IoU" = "TP" / ("TP" + "FP" + "FN")
+$
 
 Dice:
 
-$$
-\mathrm{Dice} = \frac{2|A \cap B|}{|A| + |B|}
-$$
+$
+"Dice" = (2 abs(A ∩ B)) / (abs(A) + abs(B))
+$
 
 Arquiteturas comuns:
 
@@ -350,6 +366,8 @@ loss = nn.CrossEntropyLoss()(logits, y)
 print(logits.shape, loss.item())
 ```
 
-## Resumo final
+]
+
+== Resumo final
 
 Deep learning e a composicao de funcoes parametrizadas. Redes densas aprendem relacoes globais; CNNs exploram localidade e compartilhamento de pesos; treinamento ajusta parametros via gradientes; otimizacao busca reduzir a loss; generalizacao exige controlar overfitting; segmentacao leva classificacao do nivel da imagem para o nivel do pixel.

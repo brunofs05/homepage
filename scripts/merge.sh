@@ -18,10 +18,9 @@ BONE="courses/bone.html"
 
 merge_course() {
   local course="$1"
-  local dir="courses/$course"
-  local typ="$dir/anotations.typ"
-  local out="$dir/index.html"
-  local tmp="$dir/.typst-out.html"
+  local typ="courses/$course.typ"
+  local out="courses/index/$course.html"
+  local tmp="courses/index/.$course-typst-out.html"
 
   [ -f "$typ" ]    || { echo "não achei $typ";    return 1; }
   [ -f "$BONE" ]   || { echo "não achei $BONE";   return 1; }
@@ -66,11 +65,12 @@ if [ $# -gt 0 ]; then
   # Curso específico passado como argumento
   merge_course "$1"
 else
-  # Processa todos os cursos dentro de courses/ (ignora entradas sem anotations.typ)
+  # Processa todos os cursos dentro de courses/ (ignora _utils.typ)
   [ -d "courses" ] || { echo "pasta 'courses' não encontrada"; exit 1; }
-  for dir in courses/*/; do
-    [ -f "${dir}anotations.typ" ] || continue
-    course="$(basename "$dir")"
+  for typ in courses/*.typ; do
+    [ -f "$typ" ] || continue
+    course="$(basename "$typ" .typ)"
+    [ "$course" = "_utils" ] && continue
     echo "→ processando: $course"
     merge_course "$course" || echo "⚠ erro ao processar: $course"
   done
