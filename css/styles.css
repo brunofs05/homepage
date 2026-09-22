@@ -522,8 +522,6 @@
     margin-right: 2.5rem;
     margin-top: 1.4rem;
     margin-bottom: 1.4rem;
-    border-left: 2px solid var(--border);
-    padding-left: 1rem;
   }
 
   /* Remove o triângulo padrão do navegador */
