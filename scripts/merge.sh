@@ -67,11 +67,12 @@ if [ $# -gt 0 ]; then
 else
   # Processa todos os cursos dentro de courses/ (ignora _utils.typ)
   [ -d "courses" ] || { echo "pasta 'courses' não encontrada"; exit 1; }
+  mkdir -p courses/index
   for typ in courses/*.typ; do
     [ -f "$typ" ] || continue
     course="$(basename "$typ" .typ)"
     [ "$course" = "_utils" ] && continue
     echo "→ processando: $course"
-    merge_course "$course" || echo "⚠ erro ao processar: $course"
+    merge_course "$course" || { echo "⚠ erro ao processar: $course"; exit 1; }
   done
 fi
