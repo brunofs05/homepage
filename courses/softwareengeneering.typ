@@ -17,7 +17,7 @@ These are personal class notes, not necessarily cohesive, not necessarily struct
   - Responder a mudanças mais que seguir um plano.
   Vale a pena ler o manifesto original em agilemanifesto.org.
 
-  === Scrum
+  == Scrum
 
   Scrum é um framework ágil usado para organizar e gerenciar o desenvolvimento de projetos, essencialmente de software. A metodologia representa os princípios e valores; o Scrum é uma ferramenta que aplica esses princípios de forma estruturada e prática. Scrum não é um processo completo nem uma técnica de desenvolvimento — é um framework dentro do qual você emprega seus próprios processos e técnicas.
 
