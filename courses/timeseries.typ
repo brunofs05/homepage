@@ -4,10 +4,10 @@
 Notes:
 These are personal class notes, not necessarily cohesive, not necessarily structured, and — most importantly — not necessarily accurate! Please check the sources, and feel free to point out any errors via email!
 
-
-#collapsible(summary: "Anotacoes")[
-
 #divider()
+
+#collapsible(summary: "Anotacoes da A1")[
+
 
 == 1. Panorama: processo, realização e os 3 usos
 
@@ -253,7 +253,7 @@ $ Phi(B^m) phi(B) (1-B)^d (1-B^m)^D y_t = c + Theta(B^m) theta(B) epsilon_t $
 
 ]
 
-#collapsible(summary: "Comentários da Lista")[
+#collapsible(summary: "Comentários da Lista A1")[
 
 == 1)
 F: em uma série temporal as ordens das observações é fundamental, pois cada observação está associada a um instante e pode depender de observações anteriores
