@@ -1,8 +1,8 @@
 // title: Software Engineering
 #import "_utils.typ": collapsible, divider
 
-Notes:
-These are personal class notes, not necessarily cohesive, not necessarily structured, and — most importantly — not necessarily accurate! Please check the sources, and feel free to point out any errors via email!
+Notas:
+Estas são anotações pessoais de aula — não necessariamente coesas, não necessariamente estruturadas e, o mais importante, não necessariamente precisas! Por favor, verifique as fontes e sinta-se à vontade para apontar eventuais erros por e-mail!
 
 #divider()
 

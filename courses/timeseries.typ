@@ -1,12 +1,12 @@
 // title: Time Series
 #import "_utils.typ": collapsible, divider
 
-Notes:
-These are personal class notes, not necessarily cohesive, not necessarily structured, and — most importantly — not necessarily accurate! Please check the sources, and feel free to point out any errors via email!
+Notas:
+Estas são anotações pessoais de aula — não necessariamente coesas, não necessariamente estruturadas e, o mais importante, não necessariamente precisas! Por favor, verifique as fontes e sinta-se à vontade para apontar eventuais erros por e-mail!
 
 #divider()
 
-#collapsible(summary: "Anotacoes da A1")[
+#collapsible(summary: "Anotações da A1")[
 
 
 == 1. Panorama: processo, realização e os 3 usos
@@ -427,5 +427,25 @@ F: com ciclo forte, a diferenciação sazonal deve ser considerada antes da dife
 
 == 45)
 B) em um modelo SMA sazonal de ordem 1 com período 12, a ACF apresenta pico no lag 12 e corta nos lags sazonais seguintes, enquanto a PACF decai nos lags sazonais.
+
+]
+
+
+#collapsible(summary: "Anotações A2", open: false)[
+
+ljung-box no arima: recap
+
+arima e sarima
+
+OLS
+
+Sazonalidade fixa ou estocástica
+
+Efeito sazonal fixo
+
+Janela deslizante
+
+
+
 
 ]
