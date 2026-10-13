@@ -1,4 +1,4 @@
-// title: Software Engineering
+// title: Engenharia de Software
 #import "_utils.typ": collapsible, divider
 
 Notas:
@@ -6,216 +6,117 @@ Estas são anotações pessoais de aula — não necessariamente coesas, não ne
 
 #divider()
 
+
 #collapsible(summary: "Metodologias Ágeis", open: false)[
 
-  Metodologia Ágil é uma abordagem de desenvolvimento que prioriza entregas rápidas e incrementais, adaptação a mudanças e colaboração contínua entre equipe e cliente. O foco está em responder às mudanças em vez de seguir um plano rígido — ao contrário das metodologias tradicionais (como o modelo cascata), onde cada fase deve ser concluída antes da próxima começar.
+  == Contexto
 
-  Existe um Manifesto Ágil, escrito em 2001 pelos seus criadores, que sintetiza os principais valores em um texto curto e direto. Ele estabelece quatro valores centrais:
-  - Indivíduos e interações mais que processos e ferramentas;
-  - Software em funcionamento mais que documentação abrangente;
-  - Colaboração com o cliente mais que negociação de contratos;
-  - Responder a mudanças mais que seguir um plano.
-  Vale a pena ler o manifesto original em agilemanifesto.org.
+  Metodologia ágil é uma abordagem de desenvolvimento baseada em entregas curtas e incrementais, adaptação a mudanças e colaboração contínua entre equipe e cliente. Ela se opõe ao modelo cascata, em que cada fase só começa quando a anterior termina e o plano raramente muda.
+
+  O *Manifesto Ágil* (2001) resume a ideia em quatro valores. Os itens da direita importam, mas os da esquerda importam mais:
+
+  - Indivíduos e interações _sobre_ processos e ferramentas;
+  - Software em funcionamento _sobre_ documentação abrangente;
+  - Colaboração com o cliente _sobre_ negociação de contratos;
+  - Responder a mudanças _sobre_ seguir um plano.
 
   == Scrum
 
-  Scrum é um framework ágil usado para organizar e gerenciar o desenvolvimento de projetos, essencialmente de software. A metodologia representa os princípios e valores; o Scrum é uma ferramenta que aplica esses princípios de forma estruturada e prática. Scrum não é um processo completo nem uma técnica de desenvolvimento — é um framework dentro do qual você emprega seus próprios processos e técnicas.
+  Scrum é um framework ágil para organizar o desenvolvimento de produtos complexos. Não é um processo completo nem uma técnica: é uma estrutura mínima de papéis, eventos e artefatos, dentro da qual o time encaixa seus próprios processos e técnicas.
 
-  Definição formal (Scrum Guide): _"Um framework dentro do qual pessoas podem tratar e resolver problemas complexos e adaptativos, enquanto produtiva e criativamente entregam produtos com o mais alto valor possível."_
+  === Base: empirismo
 
-  Scrum é: leve, simples de entender e extremamente difícil de dominar.
+  O conhecimento vem da experiência, e as decisões se baseiam no que já é conhecido. Três pilares sustentam isso:
 
-  ==== Componentes do Scrum
+  - *Transparência*: o que importa no processo é visível a todos os envolvidos, com linguagem comum e uma definição compartilhada de "Pronto".
+  - *Inspeção*: artefatos e progresso são examinados com frequência, para detectar desvios cedo.
+  - *Adaptação*: se algo saiu dos limites aceitáveis, o processo ou o produto é ajustado o quanto antes.
 
-  O Scrum é composto por quatro elementos que se integram pelas regras:
+  === Time Scrum
 
-  - *Papéis*: definem as responsabilidades de cada pessoa do Time Scrum.
-  - *Eventos*: cerimônias com duração máxima (time-box) que criam ritmo, inspeção e adaptação.
-  - *Artefatos*: representações do trabalho e do valor, projetadas para maximizar a transparência.
-  - *Regras*: integram papéis, eventos e artefatos, definindo como tudo se relaciona. São descritas no próprio Scrum Guide.
+  É formado por três papéis. O time é *multifuncional* (reúne todas as habilidades necessárias) e *autogerenciável* (decide sozinho como fazer o trabalho).
 
-  ==== Teoria do Scrum
+  - *Product Owner (PO)*: uma única pessoa, nunca um comitê, responsável pelo Backlog do Produto e por maximizar o valor do produto. Ordena os itens e garante que estejam claros para todos. A organização precisa respeitar suas decisões.
+  - *Time de Desenvolvimento*: entrega um incremento "Pronto" a cada Sprint. Todos são "Desenvolvedores", sem títulos nem sub-times (como um time de testes separado). O tamanho ideal é de 3 a 9 pessoas: abaixo disso falta interação, acima disso a coordenação pesa.
+  - *Scrum Master (SM)*: servo-líder que garante que o Scrum seja entendido e aplicado. Remove impedimentos, facilita os eventos e apoia o PO, o time e a organização. Não é chefe nem gerente de projeto.
 
-  O Scrum é fundamentado no empirismo — o conhecimento vem da experiência e as decisões são baseadas no que é conhecido. Três pilares sustentam isso:
+  === Eventos
 
-  - *Transparência*: aspectos significativos do processo devem estar visíveis a todos os responsáveis pelos resultados. Exige linguagem comum e uma definição compartilhada de "Pronto".
-  - *Inspeção*: os artefatos e o progresso devem ser inspecionados com frequência suficiente para detectar variações indesejadas, sem que isso atrapalhe a execução.
-  - *Adaptação*: se a inspeção revela que algo desviou dos limites aceitáveis, o processo ou o material deve ser ajustado o mais rápido possível.
+  Os eventos criam uma rotina e reduzem reuniões não planejadas. Todos têm duração máxima (*time-box*), e a Sprint contém todos os outros. Durações abaixo são para uma Sprint de 1 mês; Sprints menores têm eventos proporcionalmente menores.
 
-  ==== Time Scrum
+  #table(
+    columns: (auto, auto, auto, 1fr),
+    align: left,
+    [*Evento*], [*Duração máx.*], [*Quem participa*], [*Objetivo*],
+    [Sprint], [1 mês], [Time Scrum], [Ciclo de trabalho que produz um incremento "Pronto" e potencialmente lançável.],
+    [Planejamento da Sprint], [8 h], [Time Scrum], [Definir *o que* será entregue e *como*, gerando a Meta e o Backlog da Sprint.],
+    [Reunião Diária], [15 min], [Time de Desenvolvimento], [Sincronizar o time e planejar as próximas 24 h.],
+    [Revisão da Sprint], [4 h], [Time Scrum e stakeholders], [Inspecionar o incremento e adaptar o Backlog do Produto.],
+    [Retrospectiva da Sprint], [3 h], [Time Scrum], [Inspecionar a própria forma de trabalhar e criar um plano de melhoria.],
+  )
 
-  O Time Scrum é composto pelo Product Owner, o Time de Desenvolvimento e o Scrum Master. Times Scrum são *multidisciplinares/multifuncionais* (possuem todas as competências necessárias para completar o trabalho sem depender de fora da equipe) e *autogerenciáveis/auto-organizáveis* (escolhem a melhor forma de completar o trabalho, sem serem dirigidos por outros externos ao time). Ambos os termos são válidos — variam apenas na tradução do inglês _self-organizing_ e _cross-functional_.
+  *Sprint.* Tem duração fixa, que não muda durante a execução, e uma nova Sprint começa assim que a anterior termina. Nela, nada pode colocar em risco a Meta da Sprint, a qualidade não diminui e o escopo pode ser renegociado entre PO e Time de Desenvolvimento. Só o PO pode cancelá-la, e apenas quando a Meta se torna obsoleta, o que é raro.
 
-  O modelo de time no Scrum é projetado para aperfeiçoar a flexibilidade, criatividade e produtividade. Times entregam de forma iterativa e incremental, garantindo que uma versão potencialmente funcional do produto esteja sempre disponível.
+  *Planejamento.* Responde duas perguntas: _o que_ pode ser entregue nesta Sprint e _como_ o trabalho será feito. O resultado é a *Meta da Sprint*, um objetivo único que dá direção ao trabalho, e o *Backlog da Sprint*.
 
-  ===== Product Owner (PO)
+  *Reunião Diária.* Cada desenvolvedor responde a três perguntas: o que fiz ontem para ajudar a atingir a Meta, o que farei hoje e se vejo algum obstáculo. Não é uma reunião de status para gestores: é um evento do time, para o time.
 
-  É a única pessoa responsável por gerenciar o Backlog do Produto e por maximizar o valor do produto e do trabalho do Time de Desenvolvimento. Suas responsabilidades incluem:
-  - Expressar claramente os itens do Backlog do Produto;
-  - Ordenar os itens para alcançar melhor as metas;
-  - Garantir que o Backlog esteja visível, transparente e claro para todos;
-  - Garantir que o Time de Desenvolvimento entenda os itens no nível necessário.
+  *Revisão.* Reunião informal de colaboração, não uma aprovação formal. O PO diz o que está "Pronto", o time demonstra o trabalho e o grupo decide o que fazer a seguir. O resultado é um Backlog do Produto revisado.
 
-  O Product Owner é uma *pessoa*, não um comitê. Para que tenha sucesso, toda a organização deve respeitar suas decisões. Ninguém pode dar ordens ao Time de Desenvolvimento que contrariem o PO.
+  *Retrospectiva.* Acontece depois da Revisão e antes do próximo Planejamento. O time identifica o que foi bem e o que melhorar, em pessoas, processos e ferramentas, e escolhe melhorias para a próxima Sprint.
 
-  ===== Time de Desenvolvimento
+  === Artefatos
 
-  Consiste em profissionais que entregam um incremento "Pronto" ao final de cada Sprint. Características:
-  - Auto-organizados: ninguém (nem mesmo o Scrum Master) diz ao time *como* transformar o Backlog em incremento;
-  - Multifuncionais: possuem todas as habilidades necessárias como equipe;
-  - O Scrum não reconhece títulos para seus integrantes — todos são chamados de "Desenvolvedor", independente da especialidade;
-  - Não existem sub-times dedicados (ex: time de testes separado do time de desenvolvimento).
+  São representações do trabalho ou do valor, feitos para maximizar a transparência.
 
-  *Tamanho ideal*: entre 3 e 9 pessoas. Menos de 3 reduz a interação e a produtividade; mais de 9 gera complexidade de coordenação excessiva. Product Owner e Scrum Master não são contados nesse número, a menos que também executem trabalho do Backlog da Sprint.
+  - *Backlog do Produto*: lista ordenada de tudo o que o produto precisa, única fonte de requisitos. Pertence ao PO e nunca está completo. Os itens no topo são mais detalhados que os do fundo, e o *refinamento* contínuo adiciona detalhe, estimativa e ordem.
+  - *Backlog da Sprint*: itens escolhidos para a Sprint mais o plano para entregá-los. Pertence ao Time de Desenvolvimento, que é o único a alterá-lo durante a Sprint.
+  - *Incremento*: soma de todos os itens concluídos na Sprint com os incrementos anteriores. Ao fim de cada Sprint ele deve estar "Pronto", ou seja, utilizável, mesmo que o PO decida não lançá-lo.
 
-  ===== Scrum Master (SM)
-
-  É um servo-líder: garante que o Scrum seja entendido e corretamente aplicado, removendo impedimentos e protegendo o time de interferências externas. Não é chefe nem gerente de projeto.
-
-  Serve o *Product Owner*: encontrando técnicas para gerenciar o Backlog, comunicando visão e objetivos ao time, ensinando a criar itens claros e concisos, facilitando eventos Scrum.
-
-  Serve o *Time de Desenvolvimento*: treinando em autogerenciamento e interdisciplinaridade, removendo impedimentos, facilitando eventos, ajudando o time a criar produtos de alto valor.
-
-  Serve a *Organização*: liderando a adoção do Scrum, planejando implementações, ajudando funcionários e partes interessadas a entender o desenvolvimento empírico de produto, trabalhando com outros Scrum Masters para aumentar a eficácia do Scrum na organização.
-
-  ==== Eventos Scrum
-
-  Eventos prescritos são usados para criar uma rotina e minimizar a necessidade de reuniões não planejadas. Todos são *time-boxed* (possuem duração máxima definida). A Sprint é o container de todos os outros eventos.
-
-  ===== Sprint
-
-  O coração do Scrum. É um ciclo de trabalho de *até 1 mês* (time-box fixo) durante o qual um incremento "Pronto", utilizável e potencialmente lançável do produto é criado. A duração da Sprint é fixa e não pode ser alterada durante sua execução. Uma nova Sprint inicia imediatamente após o término da anterior.
-
-  Durante a Sprint:
-  - Não são feitas mudanças que coloquem em risco o objetivo da Sprint;
-  - As metas de qualidade não diminuem;
-  - O escopo pode ser clarificado e renegociado entre PO e Time de Desenvolvimento.
-
-  A Sprint pode ser *cancelada* — somente o Product Owner tem autoridade para isso. Ocorre quando o objetivo da Sprint se torna obsoleto (mudança de direção da organização, mercado ou tecnologia). Cancelamentos consomem recursos e são traumáticos para o time; são muito incomuns.
-
-  ===== Planejamento da Sprint _(Sprint Planning)_
-
-  *Duração máxima*: 8 horas para Sprint de 1 mês; proporcional para Sprints menores.
-  *DEVEM participar (falar e decidir)*: todo o Time Scrum (PO + Time de Desenvolvimento + Scrum Master).
-  *Podem participar*: outras pessoas convidadas pelo Time de Desenvolvimento para fornecer opinião técnica ou de domínio.
-
-  Responde duas perguntas:
-  - *O que* pode ser entregue como resultado do incremento desta Sprint? O Time de Desenvolvimento prevê funcionalidades; o PO apresenta o objetivo e os itens prioritários do Backlog.
-  - *Como* o trabalho escolhido será feito? O Time de Desenvolvimento decompõe os itens em tarefas, frequentemente em unidades de 1 dia ou menos.
-
-  O resultado é a *Meta da Sprint* (Sprint Goal) — objetivo único que dá direção e coesão ao trabalho — e o *Backlog da Sprint*.
-
-  ===== Reunião Diária _(Daily Scrum)_
-
-  *Duração máxima*: 15 minutos.
-  *DEVEM participar (falar)*: Time de Desenvolvimento. O Scrum Master garante que aconteça e que o time respeite o time-box.
-  *Podem participar (observar, sem falar)*: Scrum Master, PO e outras partes interessadas — mas somente o Time de Desenvolvimento tem a palavra.
-  *Frequência*: diária, mesmo horário e local, para reduzir complexidade.
-
-  Cada membro do Time de Desenvolvimento esclarece:
-  - O que eu fiz ontem que ajudou o time a atingir a meta da Sprint?
-  - O que farei hoje para ajudar o time a atingir a meta da Sprint?
-  - Vejo algum obstáculo que impeça a mim ou ao time?
-
-  Objetivo: sincronizar atividades, inspecionar progresso em direção à meta e criar um plano para as próximas 24h. Não é uma reunião de status para gestores — é um evento de planejamento do time para o time.
-
-  ===== Revisão da Sprint _(Sprint Review)_
-
-  *Duração máxima*: 4 horas para Sprint de 1 mês; proporcional para menores.
-  *DEVEM participar (falar)*: Time Scrum.
-  *Podem participar*: stakeholders-chave convidados pelo PO.
-
-  Ocorre ao final da Sprint para inspecionar o incremento e adaptar o Backlog do Produto. É uma reunião informal de colaboração — não uma reunião de status ou aprovação formal.
-
-  O que acontece:
-  - PO esclarece quais itens estão "Prontos" e quais não estão;
-  - Time de Desenvolvimento demonstra o trabalho pronto e responde perguntas;
-  - Grupo colabora sobre o que fazer a seguir;
-  - PO discute o estado atual do Backlog e projeções de datas.
-
-  O resultado é um *Backlog do Produto revisado*, que define a entrada mais provável para o próximo Planejamento da Sprint.
-
-  ===== Retrospectiva da Sprint _(Sprint Retrospective)_
-
-  *Duração máxima*: 3 horas para Sprint de 1 mês; proporcional para menores.
-  *DEVEM participar (falar)*: todo o Time Scrum. O Scrum Master participa como membro do time, não apenas como facilitador.
-  *Quando*: ocorre após a Revisão da Sprint e antes do próximo Planejamento da Sprint.
-
-  Oportunidade para o Time Scrum inspecionar a si próprio e criar um plano de melhoria concreto. Foca em pessoas, relacionamentos, processos e ferramentas.
-
-  Propósito:
-  - Inspecionar como a última Sprint foi em relação a pessoas, processos e ferramentas;
-  - Identificar o que foi bem e as potenciais melhorias, ordenando-as;
-  - Criar um plano para implementar melhorias na próxima Sprint.
-
-  ==== Work Agreement (Acordo de Trabalho)
-
-  O Work Agreement é um conjunto de regras, normas e combinados definidos pelo próprio time sobre como ele vai trabalhar junto. Não é imposto externamente — o time cria, revisa e é dono dessas regras. Exemplos típicos: horário de trabalho, canais de comunicação, definição de "Pronto", critérios de code review, forma de conduzir a Daily. O objetivo é criar um ambiente de trabalho previsível, respeitoso e produtivo, reduzindo ambiguidades e conflitos no dia a dia.
-
-  ==== Artefatos do Scrum
-
-  Artefatos são representações do trabalho ou do valor. São especificamente projetados para maximizar a transparência das informações chave, de modo que todos tenham o mesmo entendimento. Os três artefatos do Scrum são:
-
-  ===== Backlog do Produto _(Product Backlog)_
-
-  Lista ordenada de tudo o que é necessário no produto — é a única fonte de requisitos para qualquer mudança. O Product Owner é responsável por ele. Nunca está completo: evolui junto com o produto e o ambiente. É dinâmico e existirá enquanto o produto existir. Cada item possui: descrição, ordem, estimativa e valor.
-
-  *Refinamento do Backlog*: processo contínuo de adicionar detalhes, estimativas e ordem aos itens. Usualmente não consome mais de 10% da capacidade do Time de Desenvolvimento. Itens no topo da lista (maior prioridade) devem ser mais detalhados e estimados com mais precisão do que itens no fundo.
-
-  ===== Backlog da Sprint _(Sprint Backlog)_
-
-  Conjunto de itens do Backlog do Produto selecionados para a Sprint, mais o plano para entregar o incremento e atingir a meta da Sprint. Pertence exclusivamente ao Time de Desenvolvimento — somente ele pode alterá-lo durante a Sprint. É uma imagem em tempo real do trabalho planejado.
-
-  ===== Incremento
-
-  É a soma de todos os itens do Backlog do Produto completados durante a Sprint mais o valor de todos os incrementos anteriores. Ao final de cada Sprint, o incremento deve estar "Pronto" — utilizável, independente de o PO decidir lançá-lo ou não.
-
-  ===== Definição de "Pronto" _(Definition of Done)_
-
-  Entendimento compartilhado e explícito do que significa o trabalho estar completo. Garante transparência e alinha expectativas de todo o time. Todos os membros do Time Scrum devem concordar com ela. Se a organização não tem uma definição padrão, o Time de Desenvolvimento deve criar uma adequada ao produto. Com o amadurecimento do time, a definição de "Pronto" tende a se tornar mais rigorosa.
+  *Definição de "Pronto"* (_Definition of Done_): entendimento explícito e compartilhado do que significa o trabalho estar completo. Todo o time concorda com ela, e ela tende a ficar mais rigorosa conforme o time amadurece.
 
 ]
 
-#collapsible(summary: "SOLID e Padrões de Projeto", open: true)[
+#collapsible(summary: "SOLID e Padrões de Projeto", open: false)[
 
-BAQ
+  == Conceitos de Python usados nos exemplos
 
-? relembrar para que serve o __init__, self
+  - *`__init__` e `self`*: `__init__` é o construtor, chamado ao criar um objeto, e inicializa seus atributos. `self` é o próprio objeto: o primeiro parâmetro de todo método de instância, por onde se acessa `self.atributo`.
+  - *Subclasse*: classe que herda atributos e métodos de outra (a superclasse) e pode estender ou sobrescrever o comportamento.
+  - *`ABC`*: _Abstract Base Class_, o módulo `abc` do Python. Herdar de `ABC` marca a classe como abstrata: ela não pode ser instanciada diretamente e serve de contrato para as subclasses.
+  - *`@abstractmethod`*: marca um método que a classe abstrata declara mas não implementa. Toda subclasse concreta é obrigada a sobrescrevê-lo, senão não pode ser instanciada.
+  - *`__str__`*: método especial que define a representação em texto do objeto, usada por `print()` e `str()`.
 
-? abstractmethod das classes
+  *Tipagem fraca.* Python não impede que se passe qualquer coisa como parâmetro. Em vez de verificar tipos em todo método, o que deixaria o código lento e poluído, declara-se o comportamento esperado e confia-se em quem chama. Verificações ficam para a fronteira com o mundo externo (entrada do usuário, arquivos, rede).
 
-? o que é a classe ABC, o que significa herda-la
+  == SOLID
 
-? subclasse
+  *SRP* (_Single Responsibility Principle_, o S do SOLID): cada componente deve ter uma única responsabilidade, ou seja, um único motivo para mudar.
 
-? o que é a classe __str__
+  - *Code smell*: sintoma de que o design está ruim. O código funciona, mas "cheira mal" por causa de um problema estrutural.
+  - *God class*: classe ou método que faz coisas demais, concentrando responsabilidades que deveriam estar separadas.
 
-Python é fracamente tipada, nada impede ninguém de passar qualquer coisa para os parâmetros das classes e funções, ao invés de ficarmos verificando todos métodos e parâmetros no código, o que deixaria o programa lento e ruim, nós devemos declarar o comportamento esperado e confiar que quem chamou, rodou. Tudo que é tratado interno tende a ser assim, com verificações mais comuns com coisas que vem de fora do sistema.
+  Um bom teste: se uma mudança no código não obriga o `main` a mudar junto, o design melhorou.
 
-SOLID
+  *OCP* (_Open/Closed Principle_, o O do SOLID): uma classe deve estar fechada para modificação e aberta para extensão. Estende-se o comportamento criando código novo, sem reescrever o que já funciona.
 
-SRP := Princípio de Responsabilidade única : cada componente deve apresentar uma única responsabilidade, um único motivo para ser alterado. É o S do SOLID
+  == Padrões de Projeto
 
-code smell := sintoma que o desing do código está ruim, funciona mas tem um - cheiro - de um problema estrutural
+  São soluções testadas e documentadas para problemas recorrentes de modelagem. A referência é o livro _Design Patterns_ (1994), da *Gang of Four* (GoF), que os divide em três categorias:
 
-God class := classe ou método que faz muitas coisas, centralizando responsabilidades que deveriam ser separadas
+  - *Criacionais*: como criar objetos (Factory Method, Abstract Factory, Builder, Prototype, Singleton);
+  - *Estruturais*: como combinar classes e objetos em estruturas maiores;
+  - *Comportamentais*: como objetos se comunicam e dividem responsabilidades.
 
-"toda vez que uma mudança no código não obriga o main a mudar junto, o desing melhorou"
+  === Simple Factory e Factory Method
 
-Padrões de projeto são implementações testadas e bem documentadas de problemas recorrentes de modelagem, o livro referência de 1994 GoF (Gang of Four) ou talvez se chame Desing Patterns, categoriza os padroes em: criacionais (como criar objetos: factory method, abstract factory,  builder, prototype, singleton), estruturais,  comportamentais.
+  - *Simple Factory*: classe cujo único trabalho é decidir qual objeto concreto criar, tirando essa decisão de quem o consome. Não é um padrão GoF; é didático, útil para entender o Factory Method.
+  - *Factory Method*: cada subclasse decide, por meio de um método abstrato sobrescrito, qual objeto concreto criar. Substitui o `if` por polimorfismo e aplica o OCP: novos tipos entram como novas subclasses, sem alterar o código existente.
 
-Sinfle Factory := classe cujo único trabalho é decidir qual objeto concreto criar, tirando essa decisão de quem consome o objeto
+  === Builder
 
-O Simple Factory é didático, usado para entender o Factory Method que é reconhecidamente um padrão de projeto
+  Resolve o problema de montar objetos complexos, com muitos parâmetros, como uma requisição HTTP (url, header, token, body...). Uma classe _builder_ monta o objeto passo a passo e entrega o resultado no final.
 
-Factory Method := cada subclasse decide, via método abstrato sobrescrito, qual objeto concreto criar, substitui o if por polimorfismo
-
-No Factory Method, usamos o princípio do Open/Closed Principle, o O do SOLID, uma classe deve estar fechada para modificaçãoe aberta para extensão
-
-OCP := Open/Closed Principle : uma classe deve estar fechada para modificação e aberta para extensão
-
-Outro problema comum é esconder a complexidade de montar um/vários do mesmo/diferente objeto, um exemplo didático seria: construir uma requisição http, que precisaria de uma quantidade razoável de parâmetros: url, header, token, body... Para resolver isso, cria-se uma classe 
-
-Pergunta Gigatônica derivada: por que criar uma classe para passar parâmetros se, parece mais simples passar parâmetros para a classe principal com menos código? A resposta:  Builder clássico nasceu pra resolver o problema do construtor telescópico, em que pular um parâmetro opcional te obrigava a passar null pra todos os anteriores na ordem certa. Não conseguimos enxergar esse problema pois o Python já resolve isso de fábrica com kwargs e parâmetros nomeados (colocar parametro = valor_padrao).
+  _Por que não passar tudo direto no construtor?_ O Builder clássico nasceu do *construtor telescópico*: para pular um parâmetro opcional era preciso passar `null` em todos os anteriores, na ordem certa. Em Python esse problema quase não existe, porque `kwargs` e parâmetros nomeados com valor padrão (`parametro=valor_padrao`) já o resolvem.
 
 ]
