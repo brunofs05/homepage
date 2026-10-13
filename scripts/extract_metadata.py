@@ -8,7 +8,7 @@ Modo de operação (incremental por padrão):
   - Carrega photos.json existente, se houver.
   - Processa apenas fotos que ainda não estão no JSON.
   - Remove registros de fotos que foram deletadas de images/.
-  - Resultado: re-ordenado por date e salvo.
+  - Resultado: re-ordenado por date (mais novas primeiro; sem data no fim) e salvo.
 
   Use --force para ignorar o JSON existente e reprocessar tudo.
 
@@ -52,8 +52,6 @@ VALID_EXTENSIONS = {".jpg", ".jpeg"}
 # Documentados aqui para dispensar o leitor de consultar ExifTags.TAGS.
 EXIF_DATE_ORIGINAL = 0x9003  # DateTimeOriginal: quando a foto foi tirada
 EXIF_FNUMBER       = 0x829D  # FNumber: abertura da lente (ex: 2.2 → f/2.2)
-EXIF_WIDTH         = 0xA002  # ExifImageWidth
-EXIF_HEIGHT        = 0xA003  # ExifImageHeight
 EXIF_MAKE          = 0x010F  # Make: fabricante (IFD principal)
 EXIF_MODEL         = 0x0110  # Model: modelo do aparelho (IFD principal)
 
@@ -106,7 +104,9 @@ def extract_metadata(image_path: Path) -> dict:
     try:
         with Image.open(image_path) as img:
             # Corrige orientação EXIF antes de ler dimensões
-            # (fotos verticais têm width/height invertidos sem isso)
+            # (fotos verticais têm width/height invertidos sem isso).
+            # Essas dimensões são a única fonte: as tags ExifImageWidth/Height
+            # descrevem o sensor, sem rotação, e invertiam as fotos verticais.
             img = ImageOps.exif_transpose(img)
             meta["width"], meta["height"] = img.size
 
@@ -118,7 +118,7 @@ def extract_metadata(image_path: Path) -> dict:
             meta["make"]  = clean_string(exif.get(EXIF_MAKE))
             meta["model"] = clean_string(exif.get(EXIF_MODEL))
 
-            # Sub-IFD EXIF: FNumber, DateTimeOriginal, dimensões da câmera
+            # Sub-IFD EXIF: FNumber, DateTimeOriginal
             ifd = exif.get_ifd(0x8769)
 
             raw_date = ifd.get(EXIF_DATE_ORIGINAL)
@@ -126,13 +126,6 @@ def extract_metadata(image_path: Path) -> dict:
 
             raw_fnumber = ifd.get(EXIF_FNUMBER)
             meta["aperture"] = format_aperture(raw_fnumber) if raw_fnumber else None
-
-            # Dimensões do sub-IFD EXIF (mais confiáveis que as do PIL pós-transpose)
-            exif_w = ifd.get(EXIF_WIDTH)
-            exif_h = ifd.get(EXIF_HEIGHT)
-            if exif_w and exif_h:
-                meta["width"]  = int(exif_w)
-                meta["height"] = int(exif_h)
 
     except Exception as e:
         # Imagem ilegível: registra o aviso mas não interrompe o processo.
@@ -201,7 +194,9 @@ def main():
 
     # ── Mescla existentes + novos, reordena e salva ───────────────────────────
     all_records = list(kept_existing.values()) + new_records
-    all_records.sort(key=lambda r: r["date"] or "9999-99-99")
+    # Mais novas primeiro (a galeria exibe nesta ordem). Sem data ("" < qualquer
+    # data) vão para o fim, já que reverse=True inverte também a posição do vazio.
+    all_records.sort(key=lambda r: r["date"] or "", reverse=True)
 
     OUTPUT_FILE.write_text(
         json.dumps(all_records, ensure_ascii=False, indent=2),

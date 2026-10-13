@@ -6,6 +6,9 @@ Gera versões reduzidas (thumbnails) das fotos em images/, salvando-as em images
 Opera de forma incremental: só processa fotos que ainda não têm thumbnail.
 Se quiser regenerar uma thumbnail específica, apague o arquivo em images/mini/ e rode novamente.
 
+Também faz a limpeza inversa: thumbnail em images/mini/ cuja foto original não existe
+mais em images/ (foto removida) é apagada. Assim images/ é a única pasta que você edita.
+
 Por que esse script existe no CI?
   A homepage exibe thumbnails no grid (carregamento rápido) e a foto original
   só no modal. Gerar thumbnails manualmente e commitá-las é trabalho que o CI
@@ -76,6 +79,13 @@ def main():
 
         except Exception as e:
             print(f"  ⚠  {src.name}: {e}")
+
+    # Órfãs: miniaturas sem original (a foto foi removida de images/)
+    originals = {p.name for p in image_files}
+    orphans = sorted(p for p in MINI_DIR.iterdir() if p.is_file() and p.name not in originals)
+    for orphan in orphans:
+        orphan.unlink()
+        print(f"  ✗  {orphan.name} (órfã, removida)")
 
     if skipped:
         print(f"  —  {skipped} thumbnail(s) já existente(s), ignorada(s).")

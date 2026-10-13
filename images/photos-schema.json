@@ -26,8 +26,8 @@
       "filename": {
         "type": "string",
         "minLength": 1,
-        "pattern": "\\.(jpg|jpeg)$",
-        "description": "Nome do arquivo. Chave usada pelo JS para montar o src da imagem. Nunca null — sem filename, o JS não sabe qual imagem carregar."
+        "pattern": "\\.([jJ][pP][eE]?[gG])$",
+        "description": "Nome do arquivo (jpg/jpeg, maiúsculas aceitas, como o extrator). Chave usada pelo JS para montar o src da imagem. Nunca null — sem filename, o JS não sabe qual imagem carregar."
       },
 
       "date": {

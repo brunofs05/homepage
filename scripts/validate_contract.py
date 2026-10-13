@@ -33,6 +33,8 @@ from jsonschema import Draft7Validator
 ROOT        = Path(__file__).parent.parent
 DATA_FILE   = ROOT / "images" / "photos.json"
 SCHEMA_FILE = ROOT / "images" / "photos-schema.json"
+IMAGES_DIR  = ROOT / "images"
+MINI_DIR    = IMAGES_DIR / "mini"
 
 
 # ── Relatório de erros ────────────────────────────────────────────────────────
@@ -55,6 +57,26 @@ def describe_error(error: jsonschema.ValidationError) -> str:
     record_index = path_parts[0]
     field = path_parts[1] if len(path_parts) > 1 else "(registro inteiro)"
     return f"  registro [{record_index}]  campo '{field}': {error.message}"
+
+
+# ── Consistência com o disco ──────────────────────────────────────────────────
+
+def check_consistency(data: list) -> list[str]:
+    """Checagens que o JSON Schema não consegue expressar, porque olham fora do JSON:
+    o contrato diz como cada registro é; aqui conferimos se os registros batem entre si
+    e com os arquivos que o browser vai pedir (original no modal, miniatura no grid)."""
+    problems = []
+    seen = set()
+    for i, record in enumerate(data):
+        name = record.get("filename")
+        if name in seen:
+            problems.append(f"  registro [{i}]  filename duplicado: '{name}'")
+        seen.add(name)
+        if not (IMAGES_DIR / name).is_file():
+            problems.append(f"  registro [{i}]  original não existe: images/{name}")
+        if not (MINI_DIR / name).is_file():
+            problems.append(f"  registro [{i}]  miniatura não existe: images/mini/{name}")
+    return problems
 
 
 # ── Execução principal ────────────────────────────────────────────────────────
@@ -100,8 +122,13 @@ def main():
     errors    = sorted(validator.iter_errors(data), key=lambda e: list(e.absolute_path))
 
     if not errors:
-        print(f"✓ Contrato válido — {len(data)} registro(s) em conformidade.")
-        sys.exit(0)
+        problems = check_consistency(data)
+        if not problems:
+            print(f"✓ Contrato válido — {len(data)} registro(s) em conformidade.")
+            sys.exit(0)
+        print(f"✗ Dados inconsistentes com o disco — {len(problems)} problema(s):\n")
+        print("\n".join(problems))
+        sys.exit(1)
 
     # ── Relatório de falha ────────────────────────────────────────────────────
 
