@@ -26,7 +26,7 @@ bone() {
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <meta name="color-scheme" content="light dark">
-  <title>BF: DSAI: {{TITLE}}</title>
+  <title>{{TITLE}}</title>
   <link rel="stylesheet" href="../../css/styles.css">
   <script src="../../js/theme.js" defer></script>
 </head>
