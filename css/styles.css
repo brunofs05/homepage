@@ -36,7 +36,7 @@
 
   [data-theme="light"] {
     --background: #f7f7f5;
-    --foreground: #242424;
+    --foreground: #161616;
     --border: #d6d6d2;
     --title: #181818;
     --todo: #666666;
@@ -173,6 +173,19 @@
     padding: 0.04rem;
   }
 
+  /* Menu (Conteúdo) e rodapé: itens mais espaçados e com área de toque maior */
+  /* no celular. inline-block deixa o padding do link contar na área clicável. */
+  nav li,
+  footer li {
+    padding: 0.1rem 0;
+  }
+
+  nav a,
+  footer a {
+    display: inline-block;
+    padding: 0.05rem 0;
+  }
+
   /* --- TOGGLES GLOBAIS (home / nav) --- */
 
   details>summary {
@@ -247,7 +260,8 @@
     grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
     gap: 1rem;
     /* Espaço entre os itens */
-    padding: 1rem;
+    /* topo maior: afasta as fotos da legenda (h2) sobre a borda */
+    padding: 1.5rem 1rem 1rem 1rem;
     margin: 0;
   }
 
@@ -550,6 +564,53 @@
     opacity: 1;
   }
 
+  /* Itens de lista "espaçados" (separados por linha em branco no .typ) vêm do */
+  /* Typst como <li><p>…</p></li>. O p global tem padding lateral de 2.5rem, que */
+  /* aqui recuaria o texto de novo; o item já é recuado pela própria lista. */
+  .note-content li > p {
+    padding-left: 0;
+    padding-right: 0;
+    margin: 0;
+  }
+
+  .note-content li {
+    padding: 0.2rem 0;
+  }
+
+  /* Tabelas: mesmo recuo lateral dos parágrafos (2.5rem de cada lado). */
+  /* O Typst gera <table> sem classe nem estilo, então o navegador a estica */
+  /* até as bordas da caixa. */
+  .note-content table {
+    width: calc(100% - 5rem);
+    margin: 1.2rem 2.5rem;
+    border-collapse: collapse;
+  }
+
+  /* Grade completa: uma linha fina em cada célula (collapse funde as bordas */
+  /* vizinhas em uma só). O cabeçalho é a primeira linha, com traço mais forte. */
+  .note-content td {
+    vertical-align: top;
+    padding: 0.4rem 0.7rem;
+    border: 1px solid var(--border);
+  }
+
+  .note-content tr:first-child td {
+    border-bottom: 2px solid var(--border);
+  }
+
+  /* Lista sem marcador: o fim das linhas acompanha o recuo dos parágrafos. */
+  .note-content ul {
+    padding-right: 2.5rem;
+  }
+
+  /* Lista numerada: o navegador põe o número FORA da caixa do item, então com */
+  /* o recuo padrão (2.5rem) o número vaza para a esquerda da coluna do texto. */
+  /* 4rem = 2.5rem (recuo dos parágrafos) + 1.5rem para o número caber dentro. */
+  .note-content ol {
+    padding-left: 4rem;
+    padding-right: 2.5rem;
+  }
+
   /* Pequeno espaço entre o summary e o corpo expandido */
   .note-content details[open]>summary {
     margin-bottom: 0.6rem;
@@ -560,7 +621,8 @@
     flex-direction: column;
     gap: 0.8rem;
     padding: 0;
-    margin: 1rem 1.5rem; /* Aumentado espaçamento lateral */
+    /* topo maior: afasta os cards da legenda (h2) sobre a borda */
+    margin: 1.5rem 1.5rem 1rem 1.5rem;
   }
 
   .card {
@@ -634,13 +696,14 @@
       margin-right: 0;
       border-left: 0;
       border-right: 0;
-      padding-left: 0.75rem;
-      padding-right: 0.75rem;
+      padding-left: 1.25rem;
+      padding-right: 1.25rem;
     }
 
     /* Filhos diretos das anotações deixam de ter recuo próprio: */
     /* a caixa acima já cuida da margem lateral. */
     .note-content hr,
+    .note-content table,
     .note-content details,
     .note-content pre,
     .note-content h2,
@@ -652,6 +715,19 @@
       margin-right: 0;
     }
 
+    /* A largura da tabela (calc(100% - 5rem)) só faz sentido com margens. */
+    /* display: block + overflow-x deixa a tabela rolar na horizontal se não */
+    /* couber; min-width nas células evita colunas finas demais. */
+    .note-content table {
+      display: block;
+      width: 100%;
+      overflow-x: auto;
+    }
+
+    .note-content td {
+      min-width: 8rem;
+    }
+
     /* Parágrafo usa padding (regra global p), não margin. */
     .note-content p,
     .prose p {
@@ -660,9 +736,16 @@
     }
 
     /* Listas: o navegador põe ~40px de padding por padrão; reduz. */
-    .note-content ul,
-    .note-content ol {
+    .note-content ul {
       padding-left: 1.25rem;
+      padding-right: 0;
+    }
+
+    /* Aqui o texto já está rente à caixa (p sem padding): só o número precisa */
+    /* de espaço à esquerda. */
+    .note-content ol {
+      padding-left: 1.75rem;
+      padding-right: 0;
     }
 
     /* Código: fonte um pouco menor para caber mais por linha */
