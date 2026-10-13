@@ -1,4 +1,4 @@
-// title: Natural Language Processing
+// title: Processamento de Linguagem Natural
 #import "_utils.typ": collapsible, divider
 
 Notas:
@@ -140,6 +140,90 @@ Baseada no cálculo lambda tipado, mais em breve
 
 ]
 
+#collapsible(summary: "3. Lógica", open: false)[
+
+== 3.1 Provas em Lean
+- Lean é linguagem de programação E assistente de prova: a mesma linguagem escreve funções e provas sobre elas
+- `Prop` := tipo das proposições (enunciados verdadeiros ou falsos). Proposição é um tipo e prova é um termo desse tipo, então provar é construir um valor
+- Declarar uma proposição não é decidi-la: `#check` pergunta o tipo, não avalia se é verdade (`1 = 2` é um `Prop` perfeitamente válido)
+- Prova como termo: `theorem OneEqSelf : 1 = 1 := Eq.refl 1`. Declarar teorema é parecido com declarar função
+- `by` abre o modo de táticas: descreve-se como montar a prova e Lean constrói o termo (`#print` mostra qual foi). Útil quando o termo escrito à mão fica grande
+- `rfl` fecha igualdade quando os dois lados reduzem à mesma expressão por computação (consequência do CIC). Leis algébricas como `Nat.mul_comm` não são por definição, precisam ser aplicadas com `exact`
+- Sistema dedutivo := conjunto de regras de dedução. `Prop` implementa a dedução natural de Gentzen (1930): `Γ ⊢ α` := α deriva de Γ, `⊢ α` := α é válida (tautologia)
+- Cada conectivo tem regra de introdução (como construir uma prova que o usa) e de eliminação (como usar uma prova que o tem)
+
+#table(
+  columns: (auto, 1fr, 1fr),
+  align: left,
+  [*Conectivo*], [*Introdução*], [*Eliminação*],
+  [`→`], [`intro` (supõe o antecedente)], [modus ponens: `h hP`. `apply` raciocina de trás para frente, `exact` fecha com hipótese de mesmo tipo, `assumption` procura a hipótese sozinha],
+  [`∧`], [`constructor` (dois objetivos), `⟨_, _⟩`, `And.intro`], [projeções `.1`/`.2` (`.left`/`.right`), `obtain ⟨a, b⟩ := h`],
+  [`∨`], [basta um lado: `left`/`right` (`Or.inl`/`Or.inr`)], [prova por casos (`Or.elim`): `cases h with`, concluir nos dois casos],
+  [`¬`], [`¬P` é `P → False`: `intro hP` e derivar `False`], [`absurd`; ex falso quodlibet: de `False` sai qualquer coisa (`False.elim`)],
+  [`↔`], [`constructor` (uma prova para cada `→`), `Iff.intro`], [`h.mp`, `h.mpr`],
+  [`∀`], [`intro x` com x arbitrário (entra no contexto como variável)], [aplicação: `h d` prova `P d`],
+  [`∃`], [precisa de testemunha: `use d`, `Exists.intro`], [`obtain ⟨d, hd⟩ := h` dá nome à testemunha sem saber qual é],
+)
+
+- Lógica construtiva (intuicionista) := provar `P ∨ Q` exige saber qual lado vale. Não assume que toda proposição é verdadeira ou falsa
+- Lógica clássica acrescenta o terceiro excluído `Classical.em : P ∨ ¬P`, de onde vêm `by_cases` (divide em P e ¬P) e `by_contra` (redução ao absurdo: supõe `¬P` e deriva `False`)
+- Em Lean um tipo pode ser vazio, ao contrário do domínio não vazio da FOL clássica. Por isso `(∀ x, P x) → ∃ x, P x` só prova com um `u : U` explícito (ou a classe `Nonempty`)
+- Indução: `induction n with | zero | succ a ih`. Caso base em `Nat.zero`, passo assume a propriedade em `a` (hipótese `ih`) e prova para `a + 1`
+- Extensionalidade: `def` define funções no sentido intensional (o algoritmo), mas duas definições distintas podem ser a mesma função extensional (mesma tabela entrada → saída). `funext` reduz `f = g` a mostrar que coincidem em todo ponto
+- `decide` computa a decisão dentro do kernel (simples, pode ser lenta); `native_decide` compila para código nativo antes de executar. `omega` e `simp` aparecem quando forem necessárias
+
+== 3.2 Lógica Proposicional
+- Em `Prop` vale a irrelevância da prova: Lean não distingue provas diferentes de uma proposição, então não dá para casar padrão numa prova de `p ∧ q`. `Prop` não é dado, não é computável
+- Para manipular fórmulas como dado e decidir consequência, usa-se um tipo indutivo `Formula` (átomos com nome `String`, `top`, `bot`, `neg`, `conj`, `disj`). Implicação e bicondicional são definidas: `impl f g := disj (neg f) g`, `iff` := conjunção das duas implicações
+- Sem operadores infixos não há ambiguidade nem precedência. "Maria é jovem e bonita ou triste" vira `conj j (disj b t)` ou `disj (conj j b) t`, leituras diferentes
+- Linguagem proposicional := todas as fórmulas construíveis sobre um vocabulário de átomos. `names` extrai o vocabulário (ordenado e sem repetição). `j`, `b`, `t` são identificadores da metalinguagem (Lean), as strings `"MJ"`, `"MB"`, `"MT"` são o vocabulário da fórmula
+- `conjs` e `disjs` recebem lista. Base da recursão: conjunção vazia é `top` e disjunção vazia é `bot` (elementos neutros). A lista fica fora do construtor, pois indutivo aninhado é mais difícil de manipular
+- Como `Formula` é dado, dá para contar operadores, medir profundidade etc., coisa impossível com `Prop`
+
+=== Semântica
+- `Formula.eval f value` calcula o valor de verdade por recursão, com `value : String → Bool` (valoração). Só o caso `atom` consulta a valoração, os demais combinam subfórmulas
+- Tautologia (válida, `⊨ α`) := verdadeira em toda valoração. Contradição (insatisfatível) := falsa em toda valoração. Satisfatível := alguma valoração a torna verdadeira. Contingente := verdadeira em alguma e falsa em outra
+- Toda tautologia é satisfatível, mas nem toda satisfatível é tautologia. Se α é contradição, então `⊨ ¬α`
+- `allVals` gera todas as valorações (2ⁿ para n átomos), o que dá a tabela verdade. `tautology` percorre com `all`, `satisfiable` com `any`, `contradiction := !satisfiable`. Funciona porque os átomos são finitos
+- Consequência lógica: `P ⊨ Q` sse `⊨ P → Q` sse `P ∧ ¬Q` é contradição (é assim que `implies` é implementado). Com várias premissas, `{P₁, …, Pₙ} ⊨ α` sse `⊨ (P₁ ∧ … ∧ Pₙ) → α`
+- Equivalência `α ≡ β` := mesmo valor em toda valoração, ou seja, `implies` nos dois sentidos. Todas as tautologias são equivalentes entre si, o mesmo vale para as contradições
+- Semântica por atualização: parte-se do conjunto de todas as valorações e `update` mantém só as que satisfazem a fórmula. Contradição esvazia o conjunto, tautologia não tira nada
+
+=== Meta-teoremas e ponte com Prop
+- Meta-teoremas são teoremas sobre PL escritos em Lean, não fórmulas de PL. Mostram que as definições são consistentes (ex: toda tautologia é equivalente a `top`, a negação de tautologia é contradição, princípio da contraposição `F₁ ⊨ F₂` sse `¬F₂ ⊨ ¬F₁`)
+- `Formula.denote f v : Prop` troca cada construtor de `Formula` pelo conectivo de `Prop` (`conj` vira `∧`, `neg` vira `¬`)
+- `eval_iff_denote`: `eval = true ↔ denote`, provado por indução em f. As duas leituras concordam: calcular o valor de verdade e provar a proposição correspondente
+
+== 3.3 Lógica de Primeira Ordem
+- Em PL, "Toda maçã é vermelha" seria um átomo indivisível, sem capturar o quantificador nem a relação entre maçã e cor. FOL (lógica de predicados) acrescenta: termos (variáveis ou funções aplicadas a termos), predicados n-ários sobre termos, `∀` e `∃`
+- "Primeira ordem" := quantifica apenas sobre indivíduos do domínio
+
+=== Sintaxe
+- `Variable` := nome + índice (lista de naturais para gerar variáveis novas). `Term` := `var v` ou `struct nome args` (símbolo funcional aplicado). Constante := função de aridade zero (`struct "c" []`)
+- `Formula α` é parametrizada pelo tipo dos termos: `Formula Variable` só tem variáveis, `Formula Term` é a sintaxe completa. Construtores: `atom`, `eq`, `top`, `bot`, `neg`, `impl`, `equi`, `conj`, `disj`, `forall_`, `exists_`
+- Linguagem de primeira ordem := fórmulas construíveis a partir de um vocabulário de símbolos predicativos e funcionais
+- Em `∀x F` (ou `∃x F`) o quantificador liga as ocorrências de x em F que não estejam ligadas por um quantificador interno. Fórmula aberta := tem ocorrência livre de variável. Fechada (sentença) := não tem. `freeVars` coleta as livres e filtra a variável de cada quantificador
+- Termo t é livre para v em F quando substituir v por t não faz nenhuma variável de t ser capturada por um quantificador. Se não for, renomeia-se as variáveis ligadas de F (variante alfabética) e a substituição passa a ter o significado certo
+
+=== Semântica
+- Em PL basta uma valoração. Em FOL a interpretação é uma estrutura: um domínio D mais a interpretação dos símbolos (predicados viram relações em D, símbolos funcionais viram funções em D)
+- Como termos têm variáveis, também é preciso uma atribuição `Assign D := Variable → D`. `g[v := d]` (`Assign.update`) muda só o valor de v
+- `FInterp` interpreta símbolos funcionais, `liftAssign` interpreta termos por recursão, `Interp` interpreta predicados em `Bool`
+- `Formula.eval f dom I g tval` avalia por recursão. Os quantificadores percorrem `dom` (`all` para `∀`, `any` para `∃`), então o domínio precisa ser finito e enumerável. Em domínios infinitos não existe processo de decisão
+- Exemplo: um predicado binário `E` sobre quatro vértices é um grafo direcionado, e `E x y` é uma aresta de x para y. Símbolos fora do vocabulário ou com aridade errada avaliam silenciosamente para `false`
+- `Fin n` := naturais menores que n, útil para domínios finitos. `Fin.mk` exige prova de que o número é menor que o limite
+- Para sentenças a verdade não depende de g, mas a definição passa por subfórmulas abertas (ex: "Todo mestre tem um aprendiz" e depois "Ele tem um aprendiz", como os pronomes da língua natural)
+- Válida (`⊨ α`) := verdadeira em toda interpretação. `P ⊨ C` := todo modelo de P é modelo de C. Não há equivalente de `allVals` em FOL, então não se decide `P ⊨ C`: só dá para refutar achando um contraexemplo (`I ⊨ P` e `I ⊭ C`)
+
+=== Ponte com Prop
+- `Denot D := String → List D → Prop` interpreta predicados em `Prop`. `denote` troca cada construtor pelo conectivo de Lean, e `forall_` vira o próprio `∀`
+- `eval_iff_denote` agora precisa da hipótese `hdom : ∀ d, d ∈ dom` (a lista contém todos os elementos), contrapartida formal da limitação de só calcular quantificadores em domínios finitos
+- `denote` não depende de lista: traduz a fórmula para `Prop` e permite provar fatos em domínios infinitos (ex: `∀x ∃y R[x,y]` nos naturais com R como `<`, testemunha `a + 1`)
+- Em Prop: `Valid` := verdadeira em todo modelo, `Satisfiable` := algum modelo a torna verdadeira, `Implies f g := Valid (impl f g)`
+- Com símbolos funcionais a estrutura vira a tripla `(D, I, F)`, e `ValidT` quantifica também sobre `FInterp` e usa `liftAssign`
+
+]
+
 #collapsible(summary: "4. Conjuntos e Relações", open: false)[
 
 == 4.1 Conjuntos e notação de conjuntos
@@ -160,339 +244,5 @@ Baseada no cálculo lambda tipado, mais em breve
 == 4.3 Funções
 - Função é caso particular de relação: pra cada `a`, no máximo um `b` relacionado — é essa unicidade que permite escrever `f x` em vez de "algum b tal que..."
 - Toda relação (como conjunto de pares) tem função característica — `likesR` já É a função característica da relação de gostar
-
-]
-
-#collapsible(summary: "Exercícios do livro", open: false)[ 
-
-=== 1.X.1 possibilities
-```lean
--- Cada fato básico duplica o número de possibilidades:
--- com 0 fatos, só existe 1 "cenário" (o vazio);
--- a cada fato adicional, cada cenário anterior se desdobra em dois
--- (o fato sendo verdadeiro ou falso).
-def possibilities : Nat → Nat
-  | 0 => 1
-  | n + 1 => 2 * possibilities n
-
-#eval possibilities 10  -- com 10 fatos básicos: 1024 possibilidades
--- caso geral: possibilities n = 2 ^ n
-
--- Prova de que a função realmente computa 2 ^ n
-example (n : Nat) : possibilities n = 2 ^ n := by
-  induction n with
-  | zero =>
-    -- possibilities 0 = 1 = 2 ^ 0, ambos os lados reduzem por definição
-    rfl
-  | succ k ih =>
-    -- ih : possibilities k = 2 ^ k (hipótese de indução)
-    -- objetivo: possibilities (k+1) = 2 ^ (k+1)
-    -- desdobra possibilities (k+1) em 2 * possibilities k,
-    -- substitui pela hipótese de indução, e reagrupa a potência
-    rw [possibilities, ih, Nat.pow_succ']
-``` 
-
-== 1.X.2 sentence-go-on
-```lean
--- O ponto final não pode fazer parte do padrão que se repete,
--- senão ele apareceria no meio da frase. Por isso separamos:
--- andOn n = as n repetições de " and on", sem mais nada.
-def andOn : Nat → String
-  | 0 => ""
-  | n + 1 => " and on" ++ andOn n
-
--- sentence n = início fixo + repetições + ponto final
-def sentence (n : Nat) : String :=
-  "Sentences can go on" ++ andOn n ++ "."
-
-#eval sentence 0  -- "Sentences can go on."
-#eval sentence 1  -- "Sentences can go on and on."
-#eval sentence 2  -- "Sentences can go on and on and on."
-#eval sentence 3  -- "Sentences can go on and on and on and on."
-```
-
-== 2.X.1 sum-of-squares
-```lean
--- soma de quadrados: m² + n², reta pura aplicação da definição
-def sumOfSquares (m n : Nat) : Nat :=
-  m * m + n * n
-
-example : sumOfSquares 3 4 = 25 := rfl
-```
-
-== 2.X.2 is-weekend
-```lean
--- Day é enumeração, então basta casar os dois casos que interessam
--- e cobrir o resto com `_`
-def isWeekend (d : Day) : Bool :=
-  match d with
-  | .saturday => true
-  | .sunday   => true
-  | _         => false
-```
-
-== 2.X.3 sum-to
-```lean
--- mesma forma de recursão do factorial: caso base 0, e o passo
--- soma (n+1) ao resultado da chamada recursiva com n (estritamente menor)
-def sumTo : Nat → Nat
-  | 0     => 0
-  | n + 1 => (n + 1) + sumTo n
-
--- 0+1+2+3+4 = 10, confere por rfl (reduz direto pois 4 é literal)
-theorem sumTo_test : sumTo 4 = 10 := rfl
-```
-
-== 2.X.4 sum-list
-```lean
--- recursão sobre List tem a mesma cara da recursão sobre Nat:
--- caso base [] e o passo processa a cabeça, recursa na cauda
-def sumList (ns : List Nat) : Nat :=
-  match ns with
-  | []      => 0
-  | x :: xs => x + sumList xs
-
-theorem sumList_test : sumList [1, 2, 3, 4] = 10 := rfl
-```
-
-== 2.X.5 count-zeros
-```lean
--- igual sumList, mas em vez de acumular o valor, só conta
--- quando a cabeça é 0
-def countZeros (ns : List Nat) : Nat :=
-  match ns with
-  | []      => 0
-  | 0 :: xs => 1 + countZeros xs
-  | _ :: xs => countZeros xs
-
-theorem countZeros_test : countZeros [0, 1, 0, 2, 0] = 3 := rfl
-```
-
-== 4.X.1 five-in-above2 / one-not-in-above2 / above5-subset-above2
-```lean
--- 5 ∈ above2 é só 5 > 2, decide resolve depois de desdobrar o def
-example : 5 ∈ above2 := by
-  unfold above2
-  decide
-
--- 1 ∉ above2 é ¬(1 > 2), mesma ideia
-example : 1 ∉ above2 := by
-  unfold above2
-  decide
-
--- above5 ⊆ above2: desdobra as duas definições, desdobra a
--- pertinência de h até virar desigualdade, e omega resolve a aritmética
-example : above5 ⊆ above2 := by
-  unfold above2 above5
-  intro x h
-  simp only [Set.mem_ofPred_eq] at h ⊢
-  omega
-```
-
-== 4.X.2 union-contains / intersection-contained
-```lean
--- todo conjunto está contido na união com outro: entra pelo Or.inl
-example (A B : Set Nat) : A ⊆ A ∪ B := by
-  intro x h
-  exact Or.inl h
-
--- interseção está contida em cada um dos dois: projeta o primeiro campo
-example (A B : Set Nat) : A ∩ B ⊆ A := by
-  intro x h
-  exact h.1
-```
-
-== 4.X.3 transitividade e distribuição da inclusão (A6, A7)
-```lean
--- A6: transitividade da inclusão, encadeia as duas hipóteses
-example : A ⊆ B → B ⊆ C → A ⊆ C := by
-  intro hAB hBC x hxA
-  exact hBC (hAB hxA)
-
--- A7: contido em B e em C ⇒ contido na interseção, empacota os dois
-example : A ⊆ B → A ⊆ C → A ⊆ B ∩ C := by
-  intro hAB hAC x hxA
-  exact ⟨hAB hxA, hAC hxA⟩
-```
-
-== 4.X.4 empty-subset
-```lean
--- ∅ ⊆ A vale vacuamente: a hipótese x ∈ ∅ já é False,
--- então qualquer coisa segue dela (.elim)
-example : ∅ ⊆ A := by
-  intro x h
-  exact h.elim
-```
-
-== 4.X.5 empty-vs-singleton
-```lean
--- ∅ não tem elemento nenhum; {∅} tem exatamente um elemento
--- (o próprio ∅). São objetos diferentes: |∅| = 0, |{∅}| = 1.
--- Prova: ∅ ∈ {∅} vale por rfl; se ∅ = {∅} isso viraria ∅ ∈ ∅ (False)
-example :
-    (∅ : Set (Set α)) ≠ ({∅} : Set (Set α)) := by
-  intro h
-  have hmem : (∅ : Set α) ∈ ({∅} : Set (Set α)) := rfl
-  rw [← h] at hmem
-  exact hmem
-```
-
-== 4.X.6 double-complement ★★
-```lean
--- Aᶜᶜ = A: a direção A ⊆ Aᶜᶜ é construtiva (aplica hnx a hx dá False),
--- mas Aᶜᶜ ⊆ A precisa de dupla negação clássica (by_contra)
-example : Aᶜᶜ = A := by
-  apply Set.ext
-  intro x
-  constructor
-  · -- ¬¬(x ∈ A) → x ∈ A, direção clássica
-    intro h
-    by_contra hx
-    exact h hx
-  · -- x ∈ A → ¬¬(x ∈ A), direção construtiva
-    intro hx hnx
-    exact hnx hx
-```
-
-== 4.X.7 cartesian-square ★★
-```lean
--- produto cartesiano de Finset é ×ˢ, e .card calcula sozinho
-def playerPairs : Finset (Player × Player) :=
-  Finset.univ ×ˢ Finset.univ
-
-theorem playerPairs_test : playerPairs.card = 9 := by decide
-```
-
-== 4.X.8 successor-composition ★★
-```lean
--- plusTwo ∘ plusTwo soma 4: vai (a, a+2) e depois (a+2, a+4)
-theorem plusTwo_test (a c : Nat) :
-    Relation.Comp plusTwo plusTwo a c ↔ c = a + 4 := by
-  constructor
-  · rintro ⟨b, hab, hbc⟩
-    unfold plusTwo at hab hbc
-    omega
-  · intro h
-    exact ⟨a + 2, rfl, by unfold plusTwo; omega⟩
-```
-
-== 4.X.9 converse-subset ★★
-```lean
--- de flip R ≤ R segue R = flip R:
--- h y x : R x y → R y x (pois flip R y x = R x y)
--- h x y : R y x → R x y (pois flip R x y = R y x)
--- as duas juntas dão a equivalência ponto a ponto
-theorem flip_eq_test {α : Type} (R : Rel α α)
-    (h : flip R ≤ R) : R = flip R := by
-  funext x y
-  apply propext
-  constructor
-  · intro hxy
-    exact h y x hxy
-  · intro hyx
-    exact h x y hyx
-```
-
-== 4.X.10 which-are-transitive ★★
-```lean
--- relação finita como Finset de pares: transitividade vira
--- proposição decidível sobre os pares, decide calcula sozinho
-abbrev isTransitive (r : Finset (Nat × Nat)) : Prop :=
-  ∀ a b c, (a, b) ∈ r → (b, c) ∈ r → (a, c) ∈ r
-
-def r1 : Finset (Nat × Nat) := {(1,2), (2,3), (3,4)}
-def r2 : Finset (Nat × Nat) :=
-  {(1,2), (2,3), (3,4), (1,3), (2,4)}
-def r3 : Finset (Nat × Nat) :=
-  {(1,2), (2,3), (3,4), (1,3), (2,4), (1,4)}
-def r4 : Finset (Nat × Nat) := {(1,2), (2,1)}
-def r5 : Finset (Nat × Nat) := {(1,1), (2,2)}
-
-theorem r1_test : ¬ isTransitive r1 := by decide  -- falta (1,4)
-theorem r2_test : ¬ isTransitive r2 := by decide  -- falta (1,4)
-theorem r3_test :   isTransitive r3 := by decide  -- fechada
-theorem r4_test : ¬ isTransitive r4 := by decide  -- falta (1,1)/(2,2)
-theorem r5_test :   isTransitive r5 := by decide  -- fechada
-```
-
-== 4.X.11 transitive-iff-comp ★★
-```lean
--- R transitiva ↔ R∘R ⊆ R: cada direção é a definição de transitividade
--- desempacotada em termos do intermediário da composição
-theorem isTrans_iff_test {α : Type} (R : Rel α α) :
-    IsTrans α R ↔ Relation.Comp R R ≤ R := by
-  constructor
-  · intro hT x z hxz
-    obtain ⟨y, hxy, hyz⟩ := hxz
-    exact hT.trans x y z hxy hyz
-  · intro hcomp
-    exact ⟨fun x y z hxy hyz => hcomp x z ⟨y, hxy, hyz⟩⟩
-```
-
-== 4.X.12 transitive-not-idempotent ★★
-```lean
--- contraexemplo: relação com um único par (0,1).
--- é transitiva vacuamente (a hipótese nunca se satisfaz),
--- mas R∘R é vazia (não existe intermediário), então R∘R ≠ R
-def counterexample : Rel Nat Nat := fun a b => a = 0 ∧ b = 1
-
-theorem counterexample_trans : IsTrans Nat counterexample := by
-  refine ⟨fun a b c hab hbc => ?_⟩
-  obtain ⟨-, hb1⟩ := hab  -- b = 1
-  obtain ⟨hb0, -⟩ := hbc  -- b = 0
-  omega  -- contradição em b, fecha qualquer meta aritmética
-
-theorem counterexample_different :
-    Relation.Comp counterexample counterexample ≠
-      counterexample := by
-  intro h
-  have h01 : counterexample 0 1 := ⟨rfl, rfl⟩
-  rw [← h] at h01
-  obtain ⟨y, hy1, hy2⟩ := h01
-  obtain ⟨-, hy1'⟩ := hy1  -- y = 1
-  obtain ⟨hy2', -⟩ := hy2  -- y = 0
-  omega
-```
-
-== 4.X.13 successor-as-relation
-```lean
--- s ∘ s soma 2 duas aplicações de "+1"
-def s : Nat → Nat := fun n => n + 1
-
-theorem s_comp_test : s ∘ s = fun n => n + 2 := by
-  funext n
-  show s (s n) = n + 2
-  unfold s
-  omega
-```
-
-== 4.X.14 leq-as-function
-```lean
--- função característica de ≤: decide converte Prop decidível em Bool
-def leChar : Nat → Nat → Bool :=
-  fun m n => decide (m ≤ n)
-
-theorem leChar_test (m n : Nat) :
-    leChar m n = true ↔ m ≤ n :=
-  decide_eq_true_iff
-```
-
-== 4.X.15 graph-is-functional ★★
-```lean
--- kernel de f: x ~ y quando f x = f y — reflexiva (rfl),
--- simétrica (.symm) e transitiva (.trans) porque = já tem essas três
-def kernel {α β : Type} (f : α → β) : Rel α α :=
-  fun x y => f x = f y
-
-theorem ex_3_12 {α β : Type} (f : α → β) :
-    Equivalence (kernel f) :=
-  { refl := fun x => rfl
-    symm := fun h => h.symm
-    trans := fun h1 h2 => h1.trans h2 }
-
--- Setoid empacota a relação junto com a prova de equivalência
-def kernelSetoid {α β : Type} (f : α → β) : Setoid α :=
-  ⟨kernel f, ex_3_12 f⟩
-```
 
 ]
