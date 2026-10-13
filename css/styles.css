@@ -411,25 +411,12 @@
     padding: 0px 0px 0px 0px;
   }
 
-  .courses-like-tui {
-    /* classe para fazer as bordas das seçoes inspiradas */
-    /* no wlctl e no bluetui */
-
-    /* margin-left: auto; */
-    /* margin-right: auto; */
-
-    border-style: solid;
-    border-color: var(--border);
-    /* border-radius: 2%; */
-
-    /* top right botton left */
-    margin: 1.6rem 1rem 1rem 1rem;
-
-    padding: 1.3rem 0.5em 1.3rem 0.5rem;
-
-    /* se algum filho usar position absolute, ele será posicionado */
-    /* relativamente a mim */
-    position: relative;
+  /* .reading: modificador de .like-tui para páginas de leitura (anotações e */
+  /* "Sobre mim"). Herda borda, margem e legenda de .like-tui; só muda o respiro */
+  /* vertical. No celular, a caixa perde as laterais (veja o @media no fim). */
+  .reading {
+    padding-top: 1.3rem;
+    padding-bottom: 1.3rem;
   }
 
 
@@ -437,7 +424,8 @@
   /* Texto corrido dentro das anotações usa fonte serifada, */
   /* próxima ao Computer Modern do Typst/LaTeX, sem afetar o restante do site */
 
-  .note-content {
+  .note-content,
+  .prose {
     font-family: "STIX Two Text", Georgia, "Times New Roman", serif;
     font-size: 1.1rem;
     line-height: 1.7;
@@ -620,4 +608,66 @@
     font-size: 0.9rem;
     opacity: 0.85;
     text-align: left;
+  }
+
+
+  /* --- TELAS ESTREITAS (celular) --- */
+  /* @media aplica as regras de dentro só quando a condição é verdadeira. */
+  /* Aqui: viewport com até 600px de largura. Acima disso nada muda. */
+  /* Regras no fim do arquivo vencem as anteriores de mesma especificidade, */
+  /* por isso este bloco fica por último e só sobrescreve o necessário. */
+  @media (max-width: 600px) {
+
+    /* Parágrafos: recuo menor e alinhado à esquerda. O justify em coluna */
+    /* curta abre buracos grandes entre as palavras. */
+    p {
+      padding-left: 1rem;
+      padding-right: 1rem;
+      text-align: left;
+    }
+
+    /* Páginas de leitura (.like-tui.reading): a caixa encosta nas laterais da tela e mantém só as */
+    /* bordas de cima e de baixo. O padding lateral passa a ser o ÚNICO */
+    /* recuo do conteúdo (antes cada filho somava mais 2.5rem). */
+    .reading {
+      margin-left: 0;
+      margin-right: 0;
+      border-left: 0;
+      border-right: 0;
+      padding-left: 0.75rem;
+      padding-right: 0.75rem;
+    }
+
+    /* Filhos diretos das anotações deixam de ter recuo próprio: */
+    /* a caixa acima já cuida da margem lateral. */
+    .note-content hr,
+    .note-content details,
+    .note-content pre,
+    .note-content h2,
+    .note-content h3,
+    .note-content h4,
+    .note-content h5,
+    .note-content h6 {
+      margin-left: 0;
+      margin-right: 0;
+    }
+
+    /* Parágrafo usa padding (regra global p), não margin. */
+    .note-content p,
+    .prose p {
+      padding-left: 0;
+      padding-right: 0;
+    }
+
+    /* Listas: o navegador põe ~40px de padding por padrão; reduz. */
+    .note-content ul,
+    .note-content ol {
+      padding-left: 1.25rem;
+    }
+
+    /* Código: fonte um pouco menor para caber mais por linha */
+    /* (continua rolando na horizontal quando não couber). */
+    .note-content pre {
+      font-size: 0.85rem;
+    }
   }

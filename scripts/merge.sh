@@ -38,7 +38,7 @@ bone() {
 
   <main class="courses-main">
 
-    <section class="courses-like-tui">
+    <section class="like-tui reading">
       <h2>{{TITLE}}</h2>
       <div class="note-content">
         <!-- CONTENT:START -->
