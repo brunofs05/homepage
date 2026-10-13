@@ -4,21 +4,26 @@ on:
   push:
     branches: [main]
 
+# O workflow só precisa ler o repositório (checkout). Sem esta linha o GITHUB_TOKEN
+# do job recebe as permissões padrão do repositório, que podem incluir escrita.
+permissions:
+  contents: read
+
 jobs:
   deploy:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
 
-      # uv gerencia o venv e as dependências do projeto (Pillow, jsonschema).
+      # uv gerencia o venv e as dependências dos scripts (Pillow, jsonschema).
       # setup-uv instala o uv no runner; uv sync instala o que está em uv.lock.
       - name: Setup uv
         uses: astral-sh/setup-uv@v4
 
       - name: Install dependencies
-        # --no-install-project: instala só as dependências (Pillow, jsonschema)
-        # sem tentar buildar o pacote homepage, que depende de src/ (não está no git)
-        run: uv sync --no-install-project
+        # O pyproject.toml não tem [build-system], então o uv trata o projeto como
+        # um conjunto de scripts: instala só as dependências, sem buildar nada.
+        run: uv sync
 
       # Instala o typst CLI a partir do release oficial.
       # A versão é fixada para builds determinísticos — atualize quando necessário.
@@ -40,7 +45,7 @@ jobs:
 
       # Gera images/photos.json a partir do EXIF das fotos em images/.
       # Como photos.json não está no git, o CI sempre parte do zero aqui.
-      # Usa .venv/bin/python diretamente — uv run tentaria buildar o projeto.
+      # Usa .venv/bin/python diretamente, o mesmo interpretador que o uv sync preparou.
       - name: Generate photos metadata
         run: .venv/bin/python scripts/extract_metadata.py
 
@@ -50,15 +55,30 @@ jobs:
       - name: Validate contract
         run: .venv/bin/python scripts/validate_contract.py
 
+      # SSH_PRIVATE_KEY é a chave privada que autentica ESTE runner (GitHub Actions)
+      # na VPS: a chave pública correspondente fica em ~/.ssh/authorized_keys do
+      # usuário VPS_USER, no servidor. SSH_KNOWN_HOSTS guarda a identidade da VPS
+      # (saída de `ssh-keyscan host`), para o rsync recusar um servidor impostor.
+      # Os segredos entram por env: e não por ${{ }} dentro do script. Assim o valor
+      # chega como variável de ambiente e nunca é colado no texto do comando shell.
       - name: Setup SSH
+        env:
+          SSH_PRIVATE_KEY: ${{ secrets.SSH_PRIVATE_KEY }}
+          SSH_KNOWN_HOSTS: ${{ secrets.SSH_KNOWN_HOSTS }}
         run: |
           mkdir -p ~/.ssh
-          echo "${{ secrets.SSH_PRIVATE_KEY }}" > ~/.ssh/deploy_key
+          printf '%s\n' "$SSH_PRIVATE_KEY" > ~/.ssh/deploy_key
           chmod 600 ~/.ssh/deploy_key
-          echo "${{ secrets.SSH_KNOWN_HOSTS }}" > ~/.ssh/known_hosts
+          printf '%s\n' "$SSH_KNOWN_HOSTS" > ~/.ssh/known_hosts
 
-      # rsync sincroniza o diretório de trabalho do runner — que inclui os
-      # index.html recém-gerados e o photos.json — para o VPS. O --delete remove
-      # do servidor arquivos que não existem mais no repo (ex: fotos deletadas).
+      # rsync envia só o site, conforme scripts/deploy-filter.txt (páginas, css, js,
+      # imagens e courses/index). Fontes (.typ, scripts/, pyproject, uv.lock) ficam
+      # no repositório e não chegam ao servidor.
+      # --delete remove do servidor o que sumiu do repo (ex: fotos deletadas);
+      # --delete-excluded remove também o que está FORA da lista (ex: scripts/ enviados
+      # pelo deploy antigo). Recusa apagar o que a lista protege com "P".
       - name: Deploy via rsync
-        run: rsync -avz --delete --exclude='.git' --exclude='.github' --exclude='anotations.txt' --exclude='.venv' -e "ssh -i ~/.ssh/deploy_key -o UserKnownHostsFile=~/.ssh/known_hosts" ./ ${{ secrets.VPS_USER }}@${{ secrets.VPS_HOST }}:/var/www/homepage/
+        env:
+          VPS_USER: ${{ secrets.VPS_USER }}
+          VPS_HOST: ${{ secrets.VPS_HOST }}
+        run: rsync -avz --delete --delete-excluded --filter='. scripts/deploy-filter.txt' -e "ssh -i ~/.ssh/deploy_key -o UserKnownHostsFile=~/.ssh/known_hosts" ./ "$VPS_USER@$VPS_HOST:/var/www/homepage/"

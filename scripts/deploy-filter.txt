@@ -1,0 +1,28 @@
+# deploy-filter.txt — o que o rsync envia para a VPS.
+#
+# Formato: cada linha é uma regra, a PRIMEIRA que casar vale.
+#   +  inclui      -  exclui      P  protege do --delete no servidor
+#   /x casa a partir da raiz do projeto; *** inclui a pasta e tudo dentro dela.
+# O "- *" final exclui todo o resto, por isso só vai o que estiver listado aqui.
+#
+# Página .html nova na raiz já entra sozinha (/*.html). Só uma PASTA nova precisa
+# de uma linha "+ /pasta/***" abaixo.
+#
+# Testar sem enviar nada:
+#   rsync -avn --delete-excluded --filter='. scripts/deploy-filter.txt' ./ /tmp/destino/
+
+# O Certbot (renovação do HTTPS pelo método webroot) grava aqui, no servidor.
+# --delete-excluded apagaria; "P" impede.
+P /.well-known/***
+
+# Entradas de trabalho que existem no disco mas não são o site
+- /images/courses-thumbs/***
+- /images/photos-schema.json
+
++ /*.html
++ /css/***
++ /js/***
++ /images/***
++ /courses/
++ /courses/index/***
+- *
