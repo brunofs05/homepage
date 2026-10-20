@@ -5,5 +5,6 @@ description = "Scripts de apoio da homepage: miniaturas, metadados das fotos e v
 requires-python = ">=3.11"
 dependencies = [
     "jsonschema>=4.26.0",
+    "livereload>=2.7.1",
     "pillow>=12.3.0",
 ]
