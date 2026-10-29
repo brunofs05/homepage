@@ -33,10 +33,10 @@ jobs:
           curl -fsSL "https://github.com/typst/typst/releases/download/v${TYPST_VERSION}/typst-x86_64-unknown-linux-musl.tar.xz" \
             | tar -xJ --strip-components=1 -C /usr/local/bin typst-x86_64-unknown-linux-musl/typst
 
-      # Compila cada anotations.typ e injeta o resultado no bone.html único,
-      # gerando o index.html de cada curso. Os index.html não estão no git —
-      # eles são produzidos aqui e transferidos via rsync.
-      - name: Compile courses
+      # Compila cada <seção>/<página>.typ (courses/, projects/) e injeta o resultado
+      # no esqueleto (bone) do merge.sh, gerando <seção>/<página>.html ao lado do .typ.
+      # Os .html não estão no git — eles são produzidos aqui e transferidos via rsync.
+      - name: Compile pages
         run: bash scripts/merge.sh
 
       # Gera thumbnails para qualquer foto que ainda não tenha
@@ -72,8 +72,8 @@ jobs:
           printf '%s\n' "$SSH_KNOWN_HOSTS" > ~/.ssh/known_hosts
 
       # rsync envia só o site, conforme scripts/deploy-filter.txt (páginas, css, js,
-      # imagens e courses/index). Fontes (.typ, scripts/, pyproject, uv.lock) ficam
-      # no repositório e não chegam ao servidor.
+      # imagens e os .html gerados de courses/ e projects/). Fontes (.typ, fotos das
+      # páginas, scripts/, pyproject, uv.lock) ficam no repositório e não chegam ao servidor.
       # --delete remove do servidor o que sumiu do repo (ex: fotos deletadas);
       # --delete-excluded remove também o que está FORA da lista (ex: scripts/ enviados
       # pelo deploy antigo). Recusa apagar o que a lista protege com "P".

@@ -1,5 +1,6 @@
-// _utils.typ — funções compartilhadas entre todos os cursos
-// Importar com: #import "../_utils.typ": collapsible
+// _utils.typ — funções compartilhadas entre todas as páginas (cursos e projetos)
+// Importar com: #import "/typst/_utils.typ": collapsible, divider
+// O caminho começa com / porque o merge.sh compila com --root . (raiz do repositório).
 
 // collapsible(summary: [...], open: false)[...corpo...]
 //
@@ -11,7 +12,6 @@
 //
 // No PDF (caso você compile sem --features html) vira
 // um bloco com borda simples como fallback.
-
 #let collapsible(summary: [], open: false, body) = context {
   if target() == "html" {
     let attrs = if open { (open: "") } else { (:) }
@@ -29,15 +29,15 @@
   }
 }
 
+
 // divider()
 //
 // Separador horizontal — substitui #line(length: 100%) nos .typ.
 // No HTML vira um <hr>; no PDF mantém o line original.
-
 #let divider() = context {
   if target() == "html" {
     html.elem("hr")
   } else {
     line(length: 100%)
   }
-}
+} 

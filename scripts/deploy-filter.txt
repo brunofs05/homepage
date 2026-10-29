@@ -8,6 +8,10 @@
 # Página .html nova na raiz já entra sozinha (/*.html). Só uma PASTA nova precisa
 # de uma linha "+ /pasta/***" abaixo.
 #
+# Seções em typst (courses/, projects/): vão só os .html gerados. Os .typ e as
+# pastas de fotos de cada página (ex: projects/egpu/) ficam de fora, porque o
+# typst embute as imagens no próprio .html.
+#
 # Testar sem enviar nada:
 #   rsync -avn --delete-excluded --filter='. scripts/deploy-filter.txt' ./ /tmp/destino/
 
@@ -16,7 +20,6 @@
 P /.well-known/***
 
 # Entradas de trabalho que existem no disco mas não são o site
-- /images/courses-thumbs/***
 - /images/photos-schema.json
 
 + /*.html
@@ -24,5 +27,7 @@ P /.well-known/***
 + /js/***
 + /images/***
 + /courses/
-+ /courses/index/***
++ /courses/*.html
++ /projects/
++ /projects/*.html
 - *

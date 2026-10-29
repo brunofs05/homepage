@@ -414,9 +414,9 @@
     padding: 0.1rem;
   }
 
-  /* aumentar a largura as anotacoes dos cursos */
-  /* para melhorar a leitura e a escrita */
-  .courses-main {
+  /* aumentar a largura das páginas de leitura geradas pelo merge.sh */
+  /* (cursos e projetos), para melhorar a leitura e a escrita */
+  .reading-main {
 
     /* pode ocupar todo espaço (100%) desde que */
     /* não ultrapasse o máximo conforável */

@@ -7,12 +7,11 @@ src/
 # O CI produz este arquivo a cada run; localmente, rode o script para gerá-lo.
 images/photos.json
 images/mini/
-images/courses-thumbs/
 
 # Gerados pelo merge.sh a partir dos .typ — não versionar.
-# Localmente: bash scripts/merge.sh [curso]
-# No CI: step "Compile courses" os produz antes do rsync.
-courses/index/*.html
-courses/index/.*-typst-out.html
+# Localmente: bash scripts/merge.sh [secao/pagina]
+# No CI: step "Compile pages" os produz antes do rsync.
+courses/*.html
+projects/*.html
 
 .vscode/

@@ -1,11 +1,15 @@
 #!/usr/bin/env bash
 set -euo pipefail
 
-# merge.sh — compila o .typ de um curso e injeta o resultado no esqueleto HTML (bone)
+# merge.sh — compila o .typ de uma página e injeta o resultado no esqueleto HTML (bone)
 #
 # Uso:
-#   bash scripts/merge.sh             → processa todos os cursos em courses/
-#   bash scripts/merge.sh deeplearning → processa apenas o curso especificado
+#   bash scripts/merge.sh                → processa todas as páginas das seções (SECTIONS)
+#   bash scripts/merge.sh projects/egpu  → processa apenas a página especificada
+#
+# Cada página é um .typ dentro de uma seção, e o .html sai ao lado dele:
+#   courses/timeseries.typ → courses/timeseries.html
+# Os .html gerados não vão para o git (veja o .gitignore).
 #
 # O título da página é lido da primeira linha do .typ:
 #   // title: Deep Learning
@@ -14,8 +18,17 @@ set -euo pipefail
 #   {{TITLE}}          → substituído pelo título acima
 #   <!-- CONTENT:START --> ... <!-- CONTENT:END --> → substituído pelo <body> do typst
 
-# bone — esqueleto compartilhado por todas as páginas de curso.
-# Os caminhos ../../ existem porque a saída vai para courses/index/.
+# Pastas que contêm páginas em typst. Seção nova: acrescentar aqui e no
+# scripts/deploy-filter.txt.
+SECTIONS=(courses projects)
+
+# Saídas intermediárias do typst ficam fora do repositório, numa pasta temporária
+# que o trap apaga quando o script termina, com sucesso ou com erro.
+TMP_DIR="$(mktemp -d)"
+trap 'rm -rf "$TMP_DIR"' EXIT
+
+# bone — esqueleto compartilhado por todas as páginas geradas.
+# Os caminhos ../ existem porque a saída fica um nível abaixo da raiz (<seção>/).
 bone() {
   cat <<'BONE_EOF'
 <!DOCTYPE html>
@@ -27,8 +40,8 @@ bone() {
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <meta name="color-scheme" content="light dark">
   <title>{{TITLE}}</title>
-  <link rel="stylesheet" href="../../css/styles.css">
-  <script src="../../js/theme.js" defer></script>
+  <link rel="stylesheet" href="../css/styles.css">
+  <script src="../js/theme.js" defer></script>
 </head>
 
 <body>
@@ -36,7 +49,7 @@ bone() {
     <h1>Bruno Ferreira</h1>
   </header>
 
-  <main class="courses-main">
+  <main class="reading-main">
 
     <section class="like-tui reading">
       <h2>{{TITLE}}</h2>
@@ -54,14 +67,13 @@ bone() {
 BONE_EOF
 }
 
-merge_course() {
-  local course="$1"
-  local typ="courses/$course.typ"
-  local out="courses/index/$course.html"
-  local tmp="courses/index/.$course-typst-out.html"
+# merge_page <seção>/<página>   ex: merge_page projects/egpu
+merge_page() {
+  local page="$1"
+  local typ="$page.typ"
+  local out="$page.html"
 
-  [ -f "$typ" ]    || { echo "não achei $typ";    return 1; }
-  mkdir -p courses/index
+  [ -f "$typ" ] || { echo "não achei $typ"; return 1; }
 
   # Lê o título da primeira linha do .typ: "// title: Deep Learning"
   local title
@@ -69,7 +81,11 @@ merge_course() {
 
   [ -n "$title" ] || { echo "⚠ título não encontrado em $typ (esperado: // title: ...)"; return 1; }
 
-  typst compile "$typ" "$tmp" --features html --root courses/
+  local tmp="$TMP_DIR/${page//\//-}.html"
+
+  # --root . → a raiz do repositório é a raiz do typst: caminhos começando com /
+  # (ex: #import "/typst/_utils.typ") valem a partir dela, em qualquer seção.
+  typst compile "$typ" "$tmp" --features html --format html --root .
 
   BONE="$(bone)" python3 - "$tmp" "$out" "$title" <<'PYEOF'
 import os, re, sys
@@ -95,21 +111,19 @@ merged = pattern.sub(f"{start}\n{content}\n{end}", skeleton)
 open(out, "w", encoding="utf-8").write(merged)
 PYEOF
 
-  rm -f "$tmp"
   echo "gerado: $out"
 }
 
 if [ $# -gt 0 ]; then
-  # Curso específico passado como argumento
-  merge_course "$1"
+  # Página específica: aceita "projects/egpu" ou "projects/egpu.typ"
+  merge_page "${1%.typ}"
 else
-  # Processa todos os cursos dentro de courses/ (ignora _utils.typ)
-  [ -d "courses" ] || { echo "pasta 'courses' não encontrada"; exit 1; }
-  for typ in courses/*.typ; do
-    [ -f "$typ" ] || continue
-    course="$(basename "$typ" .typ)"
-    [ "$course" = "_utils" ] && continue
-    echo "→ processando: $course"
-    merge_course "$course" || { echo "⚠ erro ao processar: $course"; exit 1; }
+  for section in "${SECTIONS[@]}"; do
+    [ -d "$section" ] || { echo "pasta '$section' não encontrada"; exit 1; }
+    for typ in "$section"/*.typ; do
+      [ -f "$typ" ] || continue
+      echo "→ processando: ${typ%.typ}"
+      merge_page "${typ%.typ}" || { echo "⚠ erro ao processar: $typ"; exit 1; }
+    done
   done
 fi
